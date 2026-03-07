@@ -1,0 +1,36 @@
+package com.example.pkm_forms_proyecto1.analizadores;
+
+import java_cup.runtime.*;
+
+terminal			TIPO, ASIGN, DELIMIT, IDENTI, CADENA
+				;
+non terminal			formulario, pregunta, instruccion, variable, expr, delimit, valor
+				;
+
+start with formulario;
+
+formulario ::= formulario pregunta
+	| formulario instruccion
+	| instruccion pregunta
+	| pregunta
+	;
+	
+instruccion ::= variable
+	;
+	
+variable ::= TIPO IDENTI DELIMIT
+	| TIPO IDENTI ASIGN valor delimit
+	| IDENTI ASIGN valor delimit
+	| error DELIMIT
+	;
+	
+delimit ::= DELIMIT
+	|
+	;
+
+valor ::= pregunta
+	| expr
+	| CADENA
+	;
+	
+	
