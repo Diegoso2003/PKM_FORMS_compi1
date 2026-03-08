@@ -2,23 +2,29 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 
-terminal			TIPO, ASIGN, DELIMIT, IDENTI, CADENA
+terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, COLOR, CORCHEAPER, CORCHECERRA, DELIMIT, DOS_PUNTOS, DRAW, ELEMENTS, FONT, FUENTE, GROSOR, HEIGHT, 
+				HORIZONTAL, IDENTI, LLAVE_APER, LLAVE_CERRA, ORIENTATION, PARENAPER, PARENCERRA, PUNTO, POINTX, POINTY, SECTION, STYLES, TCOLOR, TEXT_SIZE, TIPO, 
+				VERTICAL, WITH
 				;
-non terminal			formulario, pregunta, instruccion, variable, expr, delimit, valor
+non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributos_estilo, atributos_seccion, color, declaracion, delimit, 
+				element_seccion, elemento_seccion, elementos_seccion, estilo, expr, formulario, instruccion, invocacion_metodo,	orientacion, parametros, pregunta, 
+				seccion, valor, variable
 				;
 
 start with formulario;
 
 formulario ::= formulario pregunta
 	| formulario instruccion
-	| instruccion pregunta
+	| instruccion
 	| pregunta
+	| seccion
 	;
 	
-instruccion ::= variable
+instruccion ::= declaracion
+	| invocacion_metodo
 	;
 	
-variable ::= TIPO IDENTI DELIMIT
+declaracion ::= TIPO IDENTI delimit
 	| TIPO IDENTI ASIGN valor delimit
 	| IDENTI ASIGN valor delimit
 	| error DELIMIT
@@ -29,8 +35,73 @@ delimit ::= DELIMIT
 	;
 
 valor ::= pregunta
-	| expr
-	| CADENA
+	| variable
 	;
 	
+variable ::= expr
+	| CADENA
+	| IDENTI
+	;
 	
+invocacion_metodo ::= IDENTI PUNTO DRAW PARENAPER parametros PARENCERRA DELIMIT
+	;
+	
+parametros ::= variable
+	| parametros COMA variable
+	| ORIENTATION DOS_PUNTOS orientacion
+	;
+	
+seccion ::= SECTION CORCHEAPER atributos_seccion CORCHECERRA
+	| SECTION CORCHEAPER error CORCHECERRA
+	;
+	
+atributos_seccion ::= atributo_seccion
+	| atributos_seccion COMA atributo_seccion
+	;
+	
+atributo_seccion ::= atributo_general
+	| atributo_elemento
+	| ORIENTATION DOS_PUNTOS orientacion
+	| element_seccion
+	;
+	
+element_seccion ::= ELEMENTS DOS_PUNTOS LLAVE_APER elementos_seccion LLAVE_CERRA
+	;
+	
+elementos_seccion ::= elemento_seccion
+	| elementos_seccion COMA elemento_seccion
+	;
+	
+elemento_seccion ::= seccion
+	;
+	
+orientacion ::= VERTICAL
+	| HORIZONTAL
+	;
+	
+atributo_general ::= WITH DOS_PUNTOS expr
+	| HEIGHT DOS_PUNTOS expr
+	| estilo
+	;
+	
+estilo ::= STYLES CORCHEAPER atributos_estilo CORCHECERRA
+	;
+	
+atributos_estilo ::= atributo_estilo
+	| atributos_estilo COMA atributo_estilo
+	;
+	
+atributo_estilo ::= COLOR DOS_PUNTOS color
+	| BACKGROUND DOS_PUNTOS color
+	| FONT DOS_PUNTOS FUENTE
+	| TEXT_SIZE DOS_PUNTOS expr
+	| BORDER DOS_PUNTOS PARENAPER expr COMA GROSOR COMA color PARENCERRA
+	;
+	
+color ::= TCOLOR
+	;
+	
+atributo_elemento ::= POINTX DOS_PUNTOS expr
+	| POINTY DOS_PUNTOS expr
+	;
+

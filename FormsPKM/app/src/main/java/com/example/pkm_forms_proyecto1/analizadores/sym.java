@@ -8,21 +8,77 @@ package com.example.pkm_forms_proyecto1.analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int IDENTI = 5;
-  public static final int ASIGN = 3;
-  public static final int error = 1;
-  public static final int DELIMIT = 4;
-  public static final int TIPO = 2;
+  public static final int PUNTO = 25;
+  public static final int POINTY = 27;
+  public static final int LLAVE_APER = 20;
+  public static final int CORCHECERRA = 9;
+  public static final int CADENA = 5;
+  public static final int POINTX = 26;
+  public static final int IDENTI = 19;
+  public static final int DELIMIT = 10;
+  public static final int COLOR = 7;
+  public static final int ASIGN = 2;
+  public static final int SECTION = 28;
+  public static final int WITH = 34;
+  public static final int PARENCERRA = 24;
+  public static final int TIPO = 32;
+  public static final int DOS_PUNTOS = 11;
+  public static final int TCOLOR = 30;
+  public static final int GROSOR = 16;
+  public static final int COMA = 6;
   public static final int EOF = 0;
-  public static final int CADENA = 6;
+  public static final int ELEMENTS = 13;
+  public static final int HEIGHT = 17;
+  public static final int VERTICAL = 33;
+  public static final int PARENAPER = 23;
+  public static final int error = 1;
+  public static final int BORDER = 4;
+  public static final int DRAW = 12;
+  public static final int LLAVE_CERRA = 21;
+  public static final int STYLES = 29;
+  public static final int FONT = 14;
+  public static final int TEXT_SIZE = 31;
+  public static final int BACKGROUND = 3;
+  public static final int ORIENTATION = 22;
+  public static final int FUENTE = 15;
+  public static final int CORCHEAPER = 8;
+  public static final int HORIZONTAL = 18;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "TIPO",
   "ASIGN",
+  "BACKGROUND",
+  "BORDER",
+  "CADENA",
+  "COMA",
+  "COLOR",
+  "CORCHEAPER",
+  "CORCHECERRA",
   "DELIMIT",
+  "DOS_PUNTOS",
+  "DRAW",
+  "ELEMENTS",
+  "FONT",
+  "FUENTE",
+  "GROSOR",
+  "HEIGHT",
+  "HORIZONTAL",
   "IDENTI",
-  "CADENA"
+  "LLAVE_APER",
+  "LLAVE_CERRA",
+  "ORIENTATION",
+  "PARENAPER",
+  "PARENCERRA",
+  "PUNTO",
+  "POINTX",
+  "POINTY",
+  "SECTION",
+  "STYLES",
+  "TCOLOR",
+  "TEXT_SIZE",
+  "TIPO",
+  "VERTICAL",
+  "WITH"
   };
 }
 

@@ -11,7 +11,7 @@ import java_cup.runtime.*;
 %line
 %column
 
-%state STRING, INSTRUCCION, ESTRELLA, ESTRELLA_COMPLE1, ESTRELLA_COMPLE2, COMENTARIO
+%state STRING, INSTRUCCION, ESTRELLA, ESTRELLA_COMPLE1, ESTRELLA_COMPLE2, COMENTARIO, ESTILO
 
 %{
 
@@ -110,7 +110,107 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 
 %%
 
-<YYINITIAL, INSTRUCCION> {
+<ESTILO> {
+	\"color\"						{ return symbol(sym.COLOR); }
+	\"background color\"					{ return symbol(sym.BACKGROUND); }
+	\"font family\"						{ return symbol(sym.FONT); }
+	\"text size\"						{ return symbol(sym.TEXT_SIZE); }
+	\"border\"						{ return symbol(sym.BORDER); }
+}
+
+<YYINITIAL, INSTRUCCION, ESTILO> {
+	{Identificador}						{ String lexema = yytext();
+								  switch(lexema){
+									case "BLACK":
+										return symbol(sym.TCOLOR, Tcolor.BLACK);
+									case "BLUE":
+										return symbol(sym.TCOLOR, Tcolor.BLUE);
+									case "content":
+										return symbol(sym.content);
+									case "correct":
+										return symbol(sym.CORRECT);
+									case "CURSIVE":
+										return symbol(sym.FUENTE, Fuente.CURSIVE);
+									case "DO":
+										return symbol(sym.DO);
+									case "DOUBLE":
+										return symbol(sym.GROSOR, Grosor.DOUBLE);
+									case "DOTTED":
+										return symbol(sym.GROSOR, Grosor.Double);
+									case "draw":
+										cambiarAInstruccion(); return symbol(sym.DRAW);
+									case "DROP_QUESTION":
+										return symbol(sym.DROP_QUESTION);
+									case "ELSE":
+										return symbol(sym.ELSE);
+									case "elements":
+										return symbol(sym.ELEMENTS);
+									case "FOR":
+										return symbol(sym.FOR);
+									case "GREEN":
+										return symbol(sym.TCOLOR, Tcolor.GREEN);
+									case "height":
+										return symbol(sym.HEIGHT);
+									case "HORIZONTAL":
+										return symbol(sym.HORIZONTAL);
+									case "IF":
+										return symbol(sym.IF);
+									case "in":
+										return symbol(sym.IN);
+									case "LINE":
+										return symbol(sym.GROSOR, Grosor.LINE);
+									case "MONO":
+										return symbol(sym.FUENTE, Fuente.MONO);
+									case "MULTIPLE_QUESTION":
+										return symbol(sym.MULTIPLE_QUESTION);
+									case "number":
+										cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.NUMBER);
+									case "OPEN_QUESTION":
+										return symbol(sym.OPEN_QUESTION);
+									case "options":
+										return symbol(sym.OPTIONS);
+									case "orientation":
+										return symbol(sym.ORIENTATION);
+									case "pointX":
+										return symbol(sym.POINTX);
+									case "pointY":
+										return symbol(sym.POINTY);
+									case "PURPLE":
+										return symbol(sym.TCOLOR, Tcolor.PURPLE);
+									case "RED":
+										return symbol(sym.TCOLOR, Tcolor.RED);
+									case "SANS_SERIF":
+										return symbol(sym.FUENTE, Fuente.SANS_SERIF);
+									case "SECTION":
+										return symbol(sym.SECTION);
+									case "SELECT_QUESTION":
+										return symbol(sym.SELECT_QUESTION);
+									case "SKY":
+										return symbol(sym.TCOLOR, Tcolor.SKY);
+									case "special":
+										return symbol(sym.TIPO, Tipo.SPECIAL);
+									case "string":
+										cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.STRING);
+									case "styles":
+										yybegin(ESTILO); return symbol(sym.STYLES);
+									case "TEXT":
+										return symbol(sym.TEXT);
+									case "VERTICAL":
+										return symbol(sym.VERTICAL);
+									case "WHITE":
+										return symbol(sym.TCOLOR, Tcolor.WHITE);
+									case "WHILE":
+										return symbol(sym.WHILE);
+									case "who_is_that_pokemon":
+										return symbol(sym.FUNCION_SPECIAL);
+									case "with":
+										return symbol(sym.WITH);
+									case "YELLOW":
+										return symbol(sym.TCOLOR, Tcolor.YELLOW);
+									default:
+										return symbol(sym.IDENTI, lexema);
+								}
+								}
 	"<="							{ return symbol(sym.OPERACOMP, yytext()); }
 	">="							{ return symbol(sym.OPERACOMP, yytext()); }
 	"!!"							{ return symbol(sym.OPERACOMP, yytext()); }
@@ -120,97 +220,6 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"||"							{ return symbol(sym.OPERALOGIOR); }
 	"&&"							{ return symbol(sym.OPERALOGIAND); }
 	"~"							{ return symbol(sym.OPERALOGINOT); }
-	{Identificador}						{ String lexema = yytext();
-								  switch(lexema){
-								  	case "number":
-								  		cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.NUMBER);
-								  	case "string":
-								  		cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.STRING);
-								  	case "special":
-								  		return symbol(sym.TIPO, Tipo.SPECIAL);
-								  	case "in":
-								  		return symbol(sym.IN);
-								  	case "IF":
-								  		return symbol(sym.IF);
-								  	case "WHILE":
-								  		return symbol(sym.WHILE);
-								  	case "FOR":
-								  		return symbol(sym.FOR);
-								  	case "DO":
-								  		return symbol(sym.DO);
-								  	case "ELSE":
-								  		return symbol(sym.ELSE);
-								  	case "who_is_that_pokemon":
-								  		return symbol(sym.FUNCION_SPECIAL);
-								  	case "draw":
-								  		return symbol(sym.DRAW);
-								  	case "OPEN_QUESTION":
-								  		return symbol(sym.OPEN_QUESTION);
-								  	case "DROP_QUESTION":
-								  		return symbol(sym.DROP_QUESTION);
-								  	case "SELECT_QUESTION":
-								  		return symbol(sym.SELECT_QUESTION);
-								  	case "MULTIPLE_QUESTION":
-								  		return symbol(sym.MULTIPLE_QUESTION);
-								  	case "SECTION":
-								  		return symbol(sym.SECTION);
-								  	case "TEXT":
-										return symbol(sym.TEXT);
-									case "options":
-								  		return symbol(sym.OPTIONS);
-									case "correct":
-										return symbol(sym.CORRECT);
-									case "elements":
-										return symbol(sym.ELEMENTS);
-									case "styles":
-										return symbol(sym.STYLES);
-									case "VERTICAL":
-										return symbol(sym.VERTICAL);
-									case "HORIZONTAL":
-										return symbol(sym.HORIZONTAL);
-									case "orientation":
-										return symbol(sym.ORIENTATION);
-									case "pointX":
-										return symbol(sym.POINTX);
-									case "pointY":
-										return symbol(sym.POINTY);
-									case "RED":
-										return symbol(sym.COLOR, Color.RED);
-									case "BLUE":
-										return symbol(sym.COLOR, Color.BLUE);
-									case "GREEN":
-										return symbol(sym.COLOR, Color.GREEN);
-									case "PURPLE":
-										return symbol(sym.COLOR, color.PURPLE);
-									case "SKY":
-										return symbol(sym.COLOR, color.SKY);
-									case "YELLOW":
-										return symbol(sym.COLOR, color.YELLOW);
-									case "BLACK":
-										return symbol(sym.COLOR, color.BLACK);
-									case "WHITE":
-										return symbol(sym.COLOR, color.WHITE);
-									case "with":
-										return symbol(sym.WITH);
-									case "height":
-										return symbol(sym.HEIGHT);
-									case "content":
-										return symbol(sym.content);
-									case "MONO":
-										return symbol(sym.FUENTE, Fuente.MONO);
-									case "SANS_SERIF":
-										return symbol(sym.FUENTE, Fuente.SANS_SERIF);
-									case "CURSIVE":
-										return symbol(sym.FUENTE, Fuente.CURSIVE);
-									case "LINE":
-										return symbol(sym.GROSOR, Grosor.LINE);
-									case "DOTTED":
-										return symbol(sym.GROSOR, Grosor.Double);
-									case "DOUBLE":
-										return symbol(sym.GROSOR, Grosor.DOUBLE);
-								  	default:
-								  		return symbol(sym.IDENTI, lexema);
-								  }}						
 	";"							{ return symbol(sym.PUNTO_COMA); }
 	"="							{ return symbol(sym.ASIGN); }
 	\"							{ iniciarCadena(); }
@@ -233,7 +242,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"}"							{ return symbol(sym.LLAVE_CERRA); }
 	","							{ return symbol(sym.COMA); }
 	"["							{ return symbol(sym.CORCHEAPER); }
-	"]"							{ return symbol(sym.CORCHECERRA); }
+	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
+	"?"							{ return symbol(sym.COMODIN); }
 	"$".*							{ /* ignorar comentarios */ }
 	.							{ reportarErrorLexico(); }
 }
