@@ -2,13 +2,14 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 
-terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, COLOR, CORCHEAPER, CORCHECERRA, DELIMIT, DOS_PUNTOS, DRAW, ELEMENTS, FONT, FUENTE, GROSOR, HEIGHT, 
-				HORIZONTAL, IDENTI, LLAVE_APER, LLAVE_CERRA, ORIENTATION, PARENAPER, PARENCERRA, PUNTO, POINTX, POINTY, SECTION, STYLES, TCOLOR, TEXT_SIZE, TIPO, 
-				VERTICAL, WITH
+terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DOS_PUNTOS, DRAW, DROP_QUESTION, ELEMENTS, ELSE, FONT, FUENTE, 
+				GROSOR, HEIGHT, HEXADECIMAL, HORIZONTAL, IDENTI, IF, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPTIONS, ORIENTATION, PARENAPER, 
+				PARENCERRA, PUNTO, POINTX, POINTY, POKEMON, SECTION, SELECT_QUESTION, STYLES, TABLE, TCOLOR, TEXT, TEXT_SIZE, TIPO, VERTICAL, WITH
 				;
-non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributos_estilo, atributos_seccion, color, declaracion, delimit, 
-				element_seccion, elemento_seccion, elementos_seccion, estilo, expr, formulario, instruccion, invocacion_metodo,	orientacion, parametros, pregunta, 
-				seccion, valor, variable
+non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, atributos_estilo, 
+				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, color, columna_tabla, columnas_tabla, condicional, condiciones, correct, declaracion, delimit, elemento, 
+				elementos, estilo, expr, exprs, fila_tabla, filas_tabla, formulario, instruccion, invocacion_metodo, opciones, orientacion, parametros, pregunta, seccion, sino, tabla, 
+				texto, tipo_pregunta, valor, variable
 				;
 
 start with formulario;
@@ -18,6 +19,7 @@ formulario ::= formulario pregunta
 	| instruccion
 	| pregunta
 	| seccion
+	| tabla
 	;
 	
 instruccion ::= declaracion
@@ -62,17 +64,17 @@ atributos_seccion ::= atributo_seccion
 atributo_seccion ::= atributo_general
 	| atributo_elemento
 	| ORIENTATION DOS_PUNTOS orientacion
-	| element_seccion
+	| ELEMENTS DOS_PUNTOS LLAVE_APER elementos LLAVE_CERRA
 	;
 	
-element_seccion ::= ELEMENTS DOS_PUNTOS LLAVE_APER elementos_seccion LLAVE_CERRA
+elementos ::= elemento
+	| elementos COMA elemento
 	;
 	
-elementos_seccion ::= elemento_seccion
-	| elementos_seccion COMA elemento_seccion
-	;
-	
-elemento_seccion ::= seccion
+elemento ::= seccion
+	| tabla
+	| pregunta
+	| texto
 	;
 	
 orientacion ::= VERTICAL
@@ -99,9 +101,86 @@ atributo_estilo ::= COLOR DOS_PUNTOS color
 	;
 	
 color ::= TCOLOR
+	| HEXADECIMAL
+	| PARENAPER expr COMA expr COMA expr PARENCERRA
+	| MENOR_Q expr COMA expr COMA expr MAYOR_Q
 	;
 	
 atributo_elemento ::= POINTX DOS_PUNTOS expr
 	| POINTY DOS_PUNTOS expr
 	;
+	
+tabla ::= TABLE CORCHEAPER atributos_tabla CORCHECERRA
+	;
+	
+atributos_tabla ::= atributo_tabla
+	| atributos_tabla COMA atributo_tabla
+	;
+	
+atributo_tabla ::= atributo_general
+	| atributo_elemento
+	| ELEMENTS DOS_PUNTOS LLAVE_APER filas_tabla LLAVE_CERRA
+	;
+	
+filas_tabla ::= fila_tabla
+	| filas_tabla COMA fila_tabla
+	;
+	
+fila_tabla ::= CORCHEAPER columnas_tabla CORCHECERRA
+	;
+	
+columnas_tabla ::= columna_tabla
+	| columnas_tabla COMA columna_tabla
+	;
+	
+columna_tabla ::= LLAVE_APER elemento LLAVE_CERRA
+	;
+	
+texto ::= TEXT CORCHEAPER atributos_texto CORCHECERRA
+	;
+	
+atributos_texto ::= atributo_texto
+	| atributos_texto COMA atributo_texto
+	;
+	
+atributo_texto ::= atributo_general
+	| CONTENT DOS_PUNTOS CADENA
+	;
+	
+pregunta ::= tipo_pregunta CORCHEAPER atributos_pregunta CORCHECERRA
+	;
+	
+tipo_pregunta ::= DROP_QUESTION
+	| OPEN_QUESTION
+	| SELECT_QUESTION
+	| MULTIPLE_QUESTION
+	;
+	
+atributos_pregunta ::= atributo_pregunta
+	| atributos_pregunta COMA atributo_pregunta
+	;
 
+atributo_pregunta ::= atributo_general
+	| CORRECT DOS_PUNTOS correct
+	| LABEL DOS_PUNTOS CADENA
+	| OPTIONS DOS_PUNTOS opciones
+	;
+	
+correct ::= expr
+	| LLAVE_APER exprs LLAVE_CERRA
+	;
+	
+opciones ::= LLAVE_APER exprs LLAVE_CERRA
+	| POKEMON PARENAPER NUMBER COMA expr COMA expr PARENCERRA
+	;
+	
+exprs ::= expr
+	| exprs COMA expr
+	;
+
+condicional ::= IF PARENAPER condiciones PARENCERRA LLAVE_APER instruccion LLAVE_CERRA sino
+	;
+	
+sino ::= ELSE LLAVE_APER instruccion LLAVE_CERRA
+	| ELSE condicional
+	;

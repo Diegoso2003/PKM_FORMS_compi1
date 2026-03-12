@@ -116,6 +116,9 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	\"font family\"						{ return symbol(sym.FONT); }
 	\"text size\"						{ return symbol(sym.TEXT_SIZE); }
 	\"border\"						{ return symbol(sym.BORDER); }
+	">"							{ return symbol(sym.MAYOR_Q); }
+	"<"							{ return symbol(sym.MENOR_Q); }
+	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
 }
 
 <YYINITIAL, INSTRUCCION, ESTILO> {
@@ -126,7 +129,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 									case "BLUE":
 										return symbol(sym.TCOLOR, Tcolor.BLUE);
 									case "content":
-										return symbol(sym.content);
+										return symbol(sym.CONTENT);
 									case "correct":
 										return symbol(sym.CORRECT);
 									case "CURSIVE":
@@ -157,6 +160,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 										return symbol(sym.IF);
 									case "in":
 										return symbol(sym.IN);
+									case "label":
+										return symbol(sym.LABEL);
 									case "LINE":
 										return symbol(sym.GROSOR, Grosor.LINE);
 									case "MONO":
@@ -165,6 +170,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 										return symbol(sym.MULTIPLE_QUESTION);
 									case "number":
 										cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.NUMBER);
+									case "NUMBER":
+										 return symbol(sym.NUMBER);
 									case "OPEN_QUESTION":
 										return symbol(sym.OPEN_QUESTION);
 									case "options":
@@ -193,8 +200,12 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 										cambiarAInstruccion(); return symbol(sym.TIPO, Tipo.STRING);
 									case "styles":
 										yybegin(ESTILO); return symbol(sym.STYLES);
+									case "TABLE":
+										return symbol(sym.TABLE);
 									case "TEXT":
 										return symbol(sym.TEXT);
+									case "OPEN_QUESTION":
+										return symbol(sym.OPEN_QUESTION);
 									case "VERTICAL":
 										return symbol(sym.VERTICAL);
 									case "WHITE":
@@ -202,7 +213,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 									case "WHILE":
 										return symbol(sym.WHILE);
 									case "who_is_that_pokemon":
-										return symbol(sym.FUNCION_SPECIAL);
+										return symbol(sym.POKEMON);
 									case "with":
 										return symbol(sym.WITH);
 									case "YELLOW":
@@ -214,8 +225,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"<="							{ return symbol(sym.OPERACOMP, yytext()); }
 	">="							{ return symbol(sym.OPERACOMP, yytext()); }
 	"!!"							{ return symbol(sym.OPERACOMP, yytext()); }
-	">"							{ return symbol(sym.MAYOR_QUE); }
-	"<"							{ return symbol(sym.MENOR_QUE); }
+	">"							{ return symbol(sym.OPERACOMP, yytext()); }
+	"<"							{ return symbol(sym.OPERACOMP, yytext()); }
 	"=="							{ return symbol(sym.OPERACOMP, yytext()); }
 	"||"							{ return symbol(sym.OPERALOGIOR); }
 	"&&"							{ return symbol(sym.OPERALOGIAND); }
@@ -225,6 +236,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	\"							{ iniciarCadena(); }
 	{Numero}						{ return symbol(sym.NUMERO); }
 	{Decimal}						{ return symbol(sym.DECIMAL); }
+	{Hexadecimal}						{ return symbol(sym.HEXADECIMAL); }
 	"/*"							{ yybegin(COMENTARIO); }
 	"+"							{ return symbol(sym.SUMA); }
 	"-"							{ return symbol(sym.RESTA); }
@@ -234,7 +246,6 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	")"							{ return symbol(sym.PARENCERRA); }
 	"%"							{ return symbol(sym.MODULO); }
 	"^"							{ return symbol(sym.POTEN); }
-	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
 	".."							{ return symbol(sym.RANGO); }
 	"."							{ return symbol(sym.PUNTO); }
 	":"							{ return symbol(sym.DOS_PUNTOS); }
@@ -242,7 +253,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"}"							{ return symbol(sym.LLAVE_CERRA); }
 	","							{ return symbol(sym.COMA); }
 	"["							{ return symbol(sym.CORCHEAPER); }
-	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
+	"]"							{ return symbol(sym.CORCHECERRA); }
 	"?"							{ return symbol(sym.COMODIN); }
 	"$".*							{ /* ignorar comentarios */ }
 	.							{ reportarErrorLexico(); }
