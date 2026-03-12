@@ -1,4 +1,4 @@
-package //nombre del package
+package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 
@@ -6,7 +6,7 @@ import java_cup.runtime.*;
 
 %public
 %unicode
-%class DiagramaLexer
+%class FormLexer
 %cup
 %line
 %column
@@ -204,8 +204,6 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 										return symbol(sym.TABLE);
 									case "TEXT":
 										return symbol(sym.TEXT);
-									case "OPEN_QUESTION":
-										return symbol(sym.OPEN_QUESTION);
 									case "VERTICAL":
 										return symbol(sym.VERTICAL);
 									case "WHITE":
