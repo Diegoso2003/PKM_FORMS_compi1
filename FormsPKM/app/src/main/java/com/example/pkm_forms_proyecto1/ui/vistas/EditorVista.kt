@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,7 @@ fun EditorVista(navController: NavController){
     var textState by remember { mutableStateOf(TextFieldValue("")) }
     var tokens by remember { mutableStateOf(listOf<Token>()) }
     val (linea, columna) = obtenerLineaColumna(textState.text, textState.selection.start)
-
+    var menuInsertar by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -174,24 +175,31 @@ fun EditorVista(navController: NavController){
                         )
                     }
                 }
-
-                TextButton(
-                    onClick = {  }
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                Box {
+                    TextButton(
+                        onClick = { menuInsertar = true }
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.insertar),
-                            contentDescription = "icono",
-                            modifier = Modifier.size(28.dp)
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            "Insertar",
-                            fontSize = 12.sp
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.insertar),
+                                contentDescription = "icono",
+                                modifier = Modifier.size(28.dp)
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                "Insertar",
+                                fontSize = 12.sp
+                            )
+                        }
                     }
+                    DropMenuInsertar(
+                        menuInsertar = menuInsertar,
+                        ocultarse = { menuInsertar = false },
+                        textState = textState,
+                        onTextChange = { textState = it }
+                    )
                 }
             }
         }
