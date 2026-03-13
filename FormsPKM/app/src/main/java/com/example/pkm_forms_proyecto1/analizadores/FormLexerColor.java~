@@ -361,7 +361,6 @@ private void agregarToken(ColorToken color, int longitud){
 }
 
 private void iniciarCadena(){
-	yybegin(STRING);
 	cadena.clear();
 	inicio = yychar;
 	fin = inicio + 1;
@@ -375,13 +374,11 @@ private void agregarCadena(ColorToken color){
 }
 
 private void finalizarCadena(){
-	yybegin(YYINITIAL);
 	cadena.add(new Token(yychar, yychar + yytext().length(), ColorToken.NARANJA));
 	listaTokens.addAll(cadena);
 }
 
 private void agregarErrorCadena(){
-	yybegin(YYINITIAL);
 	listaTokens.add(new Token(inicio, fin, ColorToken.ROJO));
 }
 

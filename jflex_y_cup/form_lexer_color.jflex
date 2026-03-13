@@ -13,6 +13,7 @@ import java.util.List;
 %standalone
 %line
 %column
+%char
 
 %state COMENTARIO, ESTILO, STRING
 
@@ -20,43 +21,44 @@ import java.util.List;
 
 private List<Token> listaTokens = new ArrayList<>();
 private List<Token> cadena = new ArrayList<>();
-private int columna;
-private int linea;
-private int longitud;
+private long inicio;
+private long fin;
 
 public List<Token> getListaTokens(){
 	return listaTokens;
 }
 
 private void agregarToken(ColorToken color){
-	listaTokens.add(new Token(yyline, yycolumn, yytext().length(), color));
+	listaTokens.add(new Token(yychar, yychar + yytext().length(), color));
 }
 
 private void agregarToken(ColorToken color, int longitud){
-	listaTokens.add(new Token(yyline, yycolumn, longitud, color));
+	listaTokens.add(new Token(yychar, yychar + longitud, color));
 }
 
 private void iniciarCadena(){
+	yybegin(STRING);
 	cadena.clear();
-	linea = yyline + 1;
-	columna = yycolumn + 1;
-	longitud = 1;
-	cadena.add(new Token(linea, columna, 1, ColorToken.NARANJA));
+	inicio = yychar;
+	fin = inicio + 1;
+	cadena.add(new Token(inicio, fin, ColorToken.NARANJA));
 }
 
 private void agregarCadena(ColorToken color){
 	String lexema = yytext();
-	longitud += lexema.length();
-	cadena.add(new Token(yyline + 1, yycolumn + 1, lexema.length(), color));
+	fin += lexema.length();
+	cadena.add(new Token(yychar, fin, color));
 }
 
 private void finalizarCadena(){
-	cadena.add(new Token(yyline, yycolumn, yytext().length(), ColorToken.NARANJA));
+	yybegin(YYINITIAL);
+	cadena.add(new Token(yychar, yychar + yytext().length(), ColorToken.NARANJA));
 	listaTokens.addAll(cadena);
 }
 
 private void agregarErrorCadena(){
-	listaTokens.add(new Token(linea, columna, longitud, ColorToken.ROJO));
+	yybegin(YYINITIAL);
+	listaTokens.add(new Token(inicio, fin, ColorToken.ROJO));
 }
 
 %}
