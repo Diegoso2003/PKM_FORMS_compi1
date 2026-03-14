@@ -1,5 +1,8 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
+import com.example.pkm_forms_proyecto1.backend.MensajeError;
+import com.example.pkm_forms_proyecto1.enums.TipoEnum;
+import java.util.List;
 import java_cup.runtime.*;
 
 %%
@@ -11,14 +14,12 @@ import java_cup.runtime.*;
 %line
 %column
 
-%state STRING, INSTRUCCION, ESTRELLA, ESTRELLA_COMPLE1, ESTRELLA_COMPLE2, COMENTARIO, ESTILO
+%state STRING, INSTRUCCION, COMENTARIO, ESTILO
 
 %{
 
 	private StringBuilder texto = new StringBuilder();
-	private StringBuilder textoAuxi = new StrigBuilder();
 	private int estadoAnterior = YYINITIAL;
-	private int numeroEstrella;
 	private int linea;
 	private int columna;
 	private List<MensajeError> errores;
@@ -47,29 +48,14 @@ import java_cup.runtime.*;
     		MensajeError error = new MensajeError(TipoEnum.LEXICO);
             	error.setColumna(yycolumn+1);
             	error.setLinea(yyline+1);
-    		if (estado == 0 || estado == 6){
-    			error.setDescripcion("simbolo no reconocido en pseudocodigo");
-              		error.setLexema(yytext());
-    		} else if (estado == 2){
-    			error.setDescripcion("simbolo no reconocido en configuracion");
-              		error.setLexema(yytext());
-    		} else {
-    			texto.append(textoAuxi.toString());
+    		if (estado == STRING){
     			error.setDescripcion("cadena no cerrada");
     			error.setLexema(texto.toString());
+    		} else {
+    			error.setDescripcion("simbolo no reconocido");
+              		error.setLexema(yytext());
     		}
     		errores.add(error);
-    	}
-    	
-    	private void agregarEstrellas(){
-    		if(numeroEstrella == 0){
-    			texto.append(textoAuxi.toString()).append(":]");
-    			return;
-    		}
-    		for(int i = 0; i < numeroEstrella; i++){
-    			texto.append("⭐");
-    		}
-    		textoAuxi.setLength(0);
     	}
     	
     	private void cambiarAInstruccion(){
@@ -82,31 +68,15 @@ import java_cup.runtime.*;
     		estadoAnterior = YYINITIAL;
     	}
     	
-    	private void regresarACadena(){
-    		yybegin(STRING); 
-    		texto.append(textoAuxi.toString()).append(yytext());
-    		textoAuxi.setLength(0);
-    	}
-    	
 %}
 
 LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [\t\f ]
 Numero = [0-9]+
-Decimal = {Numero}\.{Numero}
+Decimal = {Numero}.{Numero}
 Letra = [a-zA-Z]
 Identificador = (_|{Letra})(_|{Letra}|{Numero})*
-EmojiAper1 = "@[:"
-EmojiAper2 = "@["
-EmojiCerra1 = ":]"
-EmojiCerra2 = "]"
 Hexadecimal = "#"[0-9A-F]{6}
-Sonrisa = {EmojiAper1}(")"+|"smile"){EmojiCerra1}
-Triste = {EmojiAper1}("("+|"sad"){EmojiCerra1}
-Serio = {EmojiAper1}("|"+|"serious"){EmojiCerra1}
-Corazon = {EmojiAper2}("<"+"3"+|"smile"){EmojiCerra2}
-Estrella = {EmojiAper1}"star"
-Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 
 %%
 
@@ -119,6 +89,10 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	">"							{ return symbol(sym.MAYOR_Q); }
 	"<"							{ return symbol(sym.MENOR_Q); }
 	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
+}
+
+<INSTRUCCION> {
+	\n							{ yybegin(YYINITIAL); return symbol(sym.DELIMIT); }
 }
 
 <YYINITIAL, INSTRUCCION, ESTILO> {
@@ -212,8 +186,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 										return symbol(sym.WHILE);
 									case "who_is_that_pokemon":
 										return symbol(sym.POKEMON);
-									case "with":
-										return symbol(sym.WITH);
+									case "width":
+										return symbol(sym.WIDTH);
 									case "YELLOW":
 										return symbol(sym.TCOLOR, Tcolor.YELLOW);
 									default:
@@ -232,9 +206,9 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	";"							{ return symbol(sym.PUNTO_COMA); }
 	"="							{ return symbol(sym.ASIGN); }
 	\"							{ iniciarCadena(); }
-	{Numero}						{ return symbol(sym.NUMERO); }
-	{Decimal}						{ return symbol(sym.DECIMAL); }
-	{Hexadecimal}						{ return symbol(sym.HEXADECIMAL); }
+	{Numero}						{ return symbol(sym.NUMERO, Integer.parseInt(yytext())); }
+	{Decimal}						{ return symbol(sym.DECIMAL, Double.parseDouble(yytext())); }
+	{Hexadecimal}						{ return symbol(sym.HEXADECIMAL, yytext()); }
 	"/*"							{ yybegin(COMENTARIO); }
 	"+"							{ return symbol(sym.SUMA); }
 	"-"							{ return symbol(sym.RESTA); }
@@ -254,46 +228,20 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"]"							{ return symbol(sym.CORCHECERRA); }
 	"?"							{ return symbol(sym.COMODIN); }
 	"$".*							{ /* ignorar comentarios */ }
+	{WhiteSpace}						{ /* ignorar espacios en blanco */ }
 	.							{ reportarErrorLexico(); }
 }
 
-<STRING, ESTRELLA, ESTRELLA_COMPLE1, ESTRELLA_COMPLE2> {
-	\\\"                					{ regresarACadena(); texto.append('"'); }
-	\"                  					{ regresarEstado(); return reportarCadena();}
-	\n							{ reportarErrorLexico(); }
-}
-
-<ESTRELLA> {
-	":]"							{ yybegin(YYINITIAL); texto.append("⭐");}
-	(":"|"-")						{ yybegin(ESTRELLA_COMPLE1); textoAuxi.append(yytext()); }
-	.							{ yybegin(STRING); texto.append(textoAuxi.toString()).append(yytext()); }
-}
-
-<ESTRELLA_COMPLE1> {
-	{Numero}						{ yybegin(ESTRELLA_COMPLE2); numeroEstrella = Integer.parseInt(yytext()); textoAuxi.append(numeroEstrella); }
-	.							{ regresarACadena(); }
-}
-
-<ESTRELLA_COMPLE2> {
-	{EmojiCerra1}						{ agregarEstrellas(); }
-	.							{ regresarACadena(); }
-}
-
 <STRING> {
-	{Sonrisa}						{ texto.append("😀"); }
-	{Triste}						{ texto.append("🥲"); }
-	{Serio}							{ texto.append("😐"); }
-	{Corazon}						{ texto.append("❤️"); }
-	{Gato}							{ texto.append("😺"); }
-	{Estrella}						{ yybegin(ESTRELLA); textoAuxi.setLength(0); textoAuxi.append(yytext()); }
+	\\\"                					{ texto.append("\\\""); }
+	\"                  					{ return reportarCadena();}
+	\n							{ reportarErrorLexico(); }
 	.							{ texto.append(yytext()); }
-}
-
-<INSTRUCCION> {
-	\n							{ yybegin(YYINITIAL); return symbol(sym.DELIMIT); }
 }
 
 <COMENTARIO> {
 	"*/"							{ yybegin(YYINITIAL); }
 	[^]							{ /* ignorar comentarios */ }
 }
+
+<<EOF>>								{ return symbol(sym.EOF); }

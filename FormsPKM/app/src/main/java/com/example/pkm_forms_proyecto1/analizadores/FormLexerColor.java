@@ -847,6 +847,8 @@ private void agregarErrorCadena(){
           case 10:
             { String lexema = yytext();
 								  switch(lexema){
+                                    case "styles":
+                                      yybegin(ESTILO);
 									case "BLACK":
 									case "BLUE":
 									case "content":
@@ -884,7 +886,6 @@ private void agregarErrorCadena(){
 									case "SKY":
 									case "special":
 									case "string":
-									case "styles":
 									case "TABLE":
 									case "TEXT":
 									case "VERTICAL":

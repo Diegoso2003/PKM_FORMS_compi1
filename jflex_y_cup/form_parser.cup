@@ -2,33 +2,39 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 
-terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DOS_PUNTOS, DRAW, DROP_QUESTION, ELEMENTS, ELSE, FONT, FUENTE, 
-				GROSOR, HEIGHT, HEXADECIMAL, HORIZONTAL, IDENTI, IF, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPTIONS, ORIENTATION, PARENAPER, 
-				PARENCERRA, PUNTO, POINTX, POINTY, POKEMON, SECTION, SELECT_QUESTION, STYLES, TABLE, TCOLOR, TEXT, TEXT_SIZE, TIPO, VERTICAL, WITH
+terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW,
+				DROP_QUESTION, ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HEXADECIMAL, HORIZONTAL, IDENTI, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, 
+				MENOR_Q, MODULO, MULTI, MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPERACOMP, OPERALOGIAND, OPERALOGIOR, OPERALOGINOT, OPTIONS, ORIENTATION, 
+				PARENAPER, PARENCERRA, POINTX, POINTY, POKEMON, POTEN, PUNTO, PUNTO_COMA, RANGO, RESTA, SECTION, SELECT_QUESTION, STYLES, SUMA, TABLE, TCOLOR, TEXT, 
+				TEXT_SIZE, TIPO, VERTICAL, WIDTH, WHILE
+				;
+terminal Integer		NUMERO
+				;
+terminal Double			DECIMAL
 				;
 non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, atributos_estilo, 
-				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, color, columna_tabla, columnas_tabla, condicional, condiciones, correct, declaracion, delimit, elemento, 
-				elementos, estilo, expr, exprs, fila_tabla, filas_tabla, formulario, instruccion, invocacion_metodo, opciones, orientacion, parametros, pregunta, seccion, sino, tabla, 
-				texto, tipo_pregunta, valor, variable
+				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, ciclo, color, columna_tabla, columnas_tabla, condicional, condiciones, 
+				condicion, condiciones_and, condiciones_or, correct, declaracion, delimit, elemento, elementos, estilo, expr, exprs, factor, fila_tabla, filas_tabla, 
+				for, formulario, instruccion, instrucciones, opciones, orientacion, parametros, poten, pregunta, seccion, sino, tabla, term, texto, tipo_pregunta, 
+				unitario, variable
 				;
 
 start with formulario;
 
-formulario ::= formulario pregunta
-	| formulario instruccion
+formulario ::= formulario instruccion
 	| instruccion
-	| pregunta
 	| seccion
 	| tabla
 	;
 	
 instruccion ::= declaracion
-	| invocacion_metodo
+	| condicional
+	| ciclo
 	;
 	
 declaracion ::= TIPO IDENTI delimit
-	| TIPO IDENTI ASIGN valor delimit
-	| IDENTI ASIGN valor delimit
+	| TIPO IDENTI ASIGN variable delimit
+	| IDENTI ASIGN variable delimit
 	| error DELIMIT
 	;
 	
@@ -36,21 +42,12 @@ delimit ::= DELIMIT
 	|
 	;
 
-valor ::= pregunta
-	| variable
+variable ::= pregunta
+	| expr
 	;
 	
-variable ::= expr
-	| CADENA
-	| IDENTI
-	;
-	
-invocacion_metodo ::= IDENTI PUNTO DRAW PARENAPER parametros PARENCERRA DELIMIT
-	;
-	
-parametros ::= variable
-	| parametros COMA variable
-	| ORIENTATION DOS_PUNTOS orientacion
+parametros ::= expr
+	| parametros COMA expr
 	;
 	
 seccion ::= SECTION CORCHEAPER atributos_seccion CORCHECERRA
@@ -75,13 +72,14 @@ elemento ::= seccion
 	| tabla
 	| pregunta
 	| texto
+	| IDENTI PUNTO DRAW PARENAPER parametros PARENCERRA
 	;
 	
 orientacion ::= VERTICAL
 	| HORIZONTAL
 	;
 	
-atributo_general ::= WITH DOS_PUNTOS expr
+atributo_general ::= WIDTH DOS_PUNTOS expr
 	| HEIGHT DOS_PUNTOS expr
 	| estilo
 	;
@@ -144,7 +142,7 @@ atributos_texto ::= atributo_texto
 	;
 	
 atributo_texto ::= atributo_general
-	| CONTENT DOS_PUNTOS CADENA
+	| CONTENT DOS_PUNTOS expr
 	;
 	
 pregunta ::= tipo_pregunta CORCHEAPER atributos_pregunta CORCHECERRA
@@ -178,9 +176,67 @@ exprs ::= expr
 	| exprs COMA expr
 	;
 
-condicional ::= IF PARENAPER condiciones PARENCERRA LLAVE_APER instruccion LLAVE_CERRA sino
+condicional ::= IF PARENAPER condiciones PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA sino
 	;
 	
-sino ::= ELSE LLAVE_APER instruccion LLAVE_CERRA
+sino ::= ELSE LLAVE_APER instrucciones LLAVE_CERRA
 	| ELSE condicional
+	;
+	
+ciclo ::= WHILE PARENAPER condiciones PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA
+	| DO LLAVE_APER instrucciones LLAVE_CERRA WHILE PARENAPER condiciones PARENCERRA
+	| FOR PARENAPER for PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA
+	;
+	
+instrucciones ::= instruccion
+	| instrucciones instruccion
+	;
+	
+for ::= IDENTI ASIGN expr PUNTO_COMA condiciones PUNTO_COMA IDENTI ASIGN expr
+	| IDENTI IN NUMERO RANGO NUMERO
+	;
+	
+expr ::= expr SUMA term
+        | expr RESTA term
+        | term
+        ;
+
+term ::= term MULTI poten
+        | term DIVIS poten
+        | poten									
+        ;
+        
+poten ::= unitario POTEN poten
+	| unitario MODULO poten
+	| unitario
+	;
+	
+unitario ::= SUMA factor
+	| RESTA factor
+	| factor
+	;
+
+factor ::= NUMERO
+	| DECIMAL
+	| IDENTI
+	| CADENA
+	| COMODIN
+        | PARENAPER expr PARENCERRA
+        ;
+        
+condicion ::= expr OPERACOMP expr
+	| expr
+	| OPERALOGINOT PARENAPER condicion PARENCERRA
+	;
+	
+condiciones_and ::= condicion OPERALOGIAND condicion
+	| OPERALOGINOT PARENAPER condiciones_and PARENCERRA
+	;
+	
+condiciones_or ::= condicion OPERALOGIOR condicion
+	| OPERALOGINOT PARENAPER condiciones_or PARENCERRA
+	;
+	
+condiciones ::= condiciones_and
+	| condiciones_or
 	;

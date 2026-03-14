@@ -95,6 +95,8 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 <YYINITIAL, ESTILO> {
 	{Identificador}						{ String lexema = yytext();
 								  switch(lexema){
+									case "styles":
+										yybegin(ESTILO);
 									case "BLACK":
 									case "BLUE":
 									case "content":
@@ -132,14 +134,13 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 									case "SKY":
 									case "special":
 									case "string":
-									case "styles":
 									case "TABLE":
 									case "TEXT":
 									case "VERTICAL":
 									case "WHITE":
 									case "WHILE":
 									case "who_is_that_pokemon":
-									case "with":
+									case "width":
 									case "YELLOW":
 										agregarToken(ColorToken.MORADO, lexema.length());
 										break;

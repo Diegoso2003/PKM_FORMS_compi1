@@ -4,9 +4,13 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import com.example.pkm_forms_proyecto1.DROP_QUESTION
+import com.example.pkm_forms_proyecto1.ESTILO
+import com.example.pkm_forms_proyecto1.OPEN_QUESTION
+import com.example.pkm_forms_proyecto1.SECTION
+import com.example.pkm_forms_proyecto1.SELECT_QUESTION
 
 @Composable
 fun DropMenuInsertar(
@@ -21,13 +25,13 @@ fun DropMenuInsertar(
     ) {
 
         DropdownMenuItem(
-            text = { Text("Insertar input") },
+            text = { Text("Sección") },
             onClick = {
                 ocultarse()
 
                 val nuevo = insertarEnCursor(
                     textState,
-                    "input nombre;\n"
+                    SECTION
                 )
 
                 onTextChange(nuevo)
@@ -35,13 +39,52 @@ fun DropMenuInsertar(
         )
 
         DropdownMenuItem(
-            text = { Text("Insertar input") },
+            text = { Text("Pregunta abierta") },
             onClick = {
                 ocultarse()
 
                 val nuevo = insertarEnCursor(
                     textState,
-                    "input nombre;\n"
+                    OPEN_QUESTION
+                )
+
+                onTextChange(nuevo)
+            }
+        )
+        DropdownMenuItem(
+            text = { Text("Pregunta desplegable") },
+            onClick = {
+                ocultarse()
+
+                val nuevo = insertarEnCursor(
+                    textState,
+                    DROP_QUESTION
+                )
+
+                onTextChange(nuevo)
+            }
+        )
+        DropdownMenuItem(
+            text = { Text("Pregunta de selección única") },
+            onClick = {
+                ocultarse()
+
+                val nuevo = insertarEnCursor(
+                    textState,
+                    SELECT_QUESTION
+                )
+
+                onTextChange(nuevo)
+            }
+        )
+        DropdownMenuItem(
+            text = { Text("Estilos") },
+            onClick = {
+                ocultarse()
+
+                val nuevo = insertarEnCursor(
+                    textState,
+                    ESTILO
                 )
 
                 onTextChange(nuevo)
