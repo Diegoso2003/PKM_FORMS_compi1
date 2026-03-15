@@ -2,21 +2,23 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 
-terminal			ASIGN, BACKGROUND, BORDER, CADENA, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW,
-				DROP_QUESTION, ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HEXADECIMAL, HORIZONTAL, IDENTI, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, 
-				MENOR_Q, MODULO, MULTI, MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPERACOMP, OPERALOGIAND, OPERALOGIOR, OPERALOGINOT, OPTIONS, ORIENTATION, 
-				PARENAPER, PARENCERRA, POINTX, POINTY, POKEMON, POTEN, PUNTO, PUNTO_COMA, RANGO, RESTA, SECTION, SELECT_QUESTION, STYLES, SUMA, TABLE, TCOLOR, TEXT, 
-				TEXT_SIZE, TIPO, VERTICAL, WIDTH, WHILE
+terminal			ASIGN, BACKGROUND, BORDER, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW, DROP_QUESTION, 
+				ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HORIZONTAL, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MODULO, MULTI, 
+				MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPERACOMP, OPERALOGIAND, OPERALOGIOR, OPERALOGINOT, OPTIONS, ORIENTATION, PARENAPER, PARENCERRA, POINTX, 
+				POINTY, POKEMON, POTEN, PUNTO, PUNTO_COMA, RANGO, RESTA, SECTION, SELECT_QUESTION, STYLES, SUMA, TABLE, TCOLOR, TEXT, TEXT_SIZE, TIPO, VERTICAL, 
+				WIDTH, WHILE
 				;
 terminal Integer		NUMERO
 				;
 terminal Double			DECIMAL
 				;
+terminal String 		CADENA, HEXADECIMAL, IDENTI
+				;
 non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, atributos_estilo, 
 				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, ciclo, color, columna_tabla, columnas_tabla, condicional, condiciones, 
 				condicion, condiciones_and, condiciones_or, correct, declaracion, delimit, elemento, elementos, estilo, expr, exprs, factor, fila_tabla, filas_tabla, 
 				for, formulario, instruccion, instrucciones, opciones, orientacion, parametros, poten, pregunta, seccion, sino, tabla, term, texto, tipo_pregunta, 
-				unitario, variable
+				unario, variable
 				;
 
 start with formulario;
@@ -201,18 +203,18 @@ expr ::= expr SUMA term
         | term
         ;
 
-term ::= term MULTI poten
-        | term DIVIS poten
-        | poten									
+term ::= term MULTI unario
+        | term DIVIS unario
+        | unario
         ;
         
-poten ::= unitario POTEN poten
-	| unitario MODULO poten
-	| unitario
+unario ::= SUMA poten
+	| RESTA poten
+	| poten
 	;
-	
-unitario ::= SUMA factor
-	| RESTA factor
+
+poten ::= poten POTEN factor
+	| poten MODULO factor
 	| factor
 	;
 

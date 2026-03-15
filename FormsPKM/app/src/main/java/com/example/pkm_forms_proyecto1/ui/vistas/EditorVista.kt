@@ -48,8 +48,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pkm_forms_proyecto1.NOMBRE_APP
 import com.example.pkm_forms_proyecto1.R
-import com.example.pkm_forms_proyecto1.backend.Coloreador
-import com.example.pkm_forms_proyecto1.backend.Token
+import com.example.pkm_forms_proyecto1.auxiliares.Coloreador
+import com.example.pkm_forms_proyecto1.auxiliares.Token
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

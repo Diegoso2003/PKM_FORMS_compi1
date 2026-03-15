@@ -2,7 +2,7 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import com.example.pkm_forms_proyecto1.backend.Token;
 import com.example.pkm_forms_proyecto1.enums.ColorToken;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 %%
@@ -19,8 +19,8 @@ import java.util.List;
 
 %{
 
-private List<Token> listaTokens = new ArrayList<>();
-private List<Token> cadena = new ArrayList<>();
+private List<Token> listaTokens = new LinkedList<>();
+private List<Token> cadena = new LinkedList<>();
 private long inicio;
 private long fin;
 

@@ -4,9 +4,9 @@
 
 package com.example.pkm_forms_proyecto1.analizadores;
 
-import com.example.pkm_forms_proyecto1.backend.Token;
+import com.example.pkm_forms_proyecto1.auxiliares.Token;
 import com.example.pkm_forms_proyecto1.enums.ColorToken;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -343,8 +343,8 @@ public class FormLexerColor {
 
   /* user code: */
 
-private List<Token> listaTokens = new ArrayList<>();
-private List<Token> cadena = new ArrayList<>();
+private List<Token> listaTokens = new LinkedList<>();
+private List<Token> cadena = new LinkedList<>();
 private long inicio;
 private long fin;
 
@@ -847,8 +847,8 @@ private void agregarErrorCadena(){
           case 10:
             { String lexema = yytext();
 								  switch(lexema){
-                                    case "styles":
-                                      yybegin(ESTILO);
+									case "styles":
+										yybegin(ESTILO);
 									case "BLACK":
 									case "BLUE":
 									case "content":
@@ -892,7 +892,7 @@ private void agregarErrorCadena(){
 									case "WHITE":
 									case "WHILE":
 									case "who_is_that_pokemon":
-									case "with":
+									case "width":
 									case "YELLOW":
 										agregarToken(ColorToken.MORADO, lexema.length());
 										break;

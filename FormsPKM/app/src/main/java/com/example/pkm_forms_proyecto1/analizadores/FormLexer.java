@@ -4,8 +4,9 @@
 
 package com.example.pkm_forms_proyecto1.analizadores;
 
-import com.example.pkm_forms_proyecto1.backend.MensajeError;
-import com.example.pkm_forms_proyecto1.enums.TipoEnum;
+import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
+import com.example.pkm_forms_proyecto1.enums.Tipo;
+import com.example.pkm_forms_proyecto1.enums.TipoError;
 import java.util.List;
 import java_cup.runtime.*;
 
@@ -372,7 +373,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
     	
     	private void reportarErrorLexico(){
     		int estado = yystate();
-    		MensajeError error = new MensajeError(TipoEnum.LEXICO);
+    		MensajeError error = new MensajeError(TipoError.LEXICO);
             	error.setColumna(yycolumn+1);
             	error.setLinea(yyline+1);
     		if (estado == STRING){
@@ -921,21 +922,21 @@ public class FormLexer implements java_cup.runtime.Scanner {
             { String lexema = yytext();
 								  switch(lexema){
 									case "BLACK":
-										return symbol(sym.TCOLOR, Tcolor.BLACK);
+										return symbol(sym.TCOLOR, lexema);
 									case "BLUE":
-										return symbol(sym.TCOLOR, Tcolor.BLUE);
+										return symbol(sym.TCOLOR, lexema);
 									case "content":
 										return symbol(sym.CONTENT);
 									case "correct":
 										return symbol(sym.CORRECT);
 									case "CURSIVE":
-										return symbol(sym.FUENTE, Fuente.CURSIVE);
+										return symbol(sym.FUENTE, lexema);
 									case "DO":
 										return symbol(sym.DO);
 									case "DOUBLE":
-										return symbol(sym.GROSOR, Grosor.DOUBLE);
+										return symbol(sym.GROSOR, lexema);
 									case "DOTTED":
-										return symbol(sym.GROSOR, Grosor.Double);
+										return symbol(sym.GROSOR, lexema);
 									case "draw":
 										cambiarAInstruccion(); return symbol(sym.DRAW);
 									case "DROP_QUESTION":
@@ -947,7 +948,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "FOR":
 										return symbol(sym.FOR);
 									case "GREEN":
-										return symbol(sym.TCOLOR, Tcolor.GREEN);
+										return symbol(sym.TCOLOR, lexema);
 									case "height":
 										return symbol(sym.HEIGHT);
 									case "HORIZONTAL":
@@ -959,9 +960,9 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "label":
 										return symbol(sym.LABEL);
 									case "LINE":
-										return symbol(sym.GROSOR, Grosor.LINE);
+										return symbol(sym.GROSOR, lexema);
 									case "MONO":
-										return symbol(sym.FUENTE, Fuente.MONO);
+										return symbol(sym.FUENTE, lexema);
 									case "MULTIPLE_QUESTION":
 										return symbol(sym.MULTIPLE_QUESTION);
 									case "number":
@@ -979,17 +980,17 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "pointY":
 										return symbol(sym.POINTY);
 									case "PURPLE":
-										return symbol(sym.TCOLOR, Tcolor.PURPLE);
+										return symbol(sym.TCOLOR, lexema);
 									case "RED":
-										return symbol(sym.TCOLOR, Tcolor.RED);
+										return symbol(sym.TCOLOR, lexema);
 									case "SANS_SERIF":
-										return symbol(sym.FUENTE, Fuente.SANS_SERIF);
+										return symbol(sym.FUENTE, lexema);
 									case "SECTION":
 										return symbol(sym.SECTION);
 									case "SELECT_QUESTION":
 										return symbol(sym.SELECT_QUESTION);
 									case "SKY":
-										return symbol(sym.TCOLOR, Tcolor.SKY);
+										return symbol(sym.TCOLOR, lexema);
 									case "special":
 										return symbol(sym.TIPO, Tipo.SPECIAL);
 									case "string":
@@ -1003,7 +1004,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "VERTICAL":
 										return symbol(sym.VERTICAL);
 									case "WHITE":
-										return symbol(sym.TCOLOR, Tcolor.WHITE);
+										return symbol(sym.TCOLOR, lexema);
 									case "WHILE":
 										return symbol(sym.WHILE);
 									case "who_is_that_pokemon":
@@ -1011,7 +1012,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "width":
 										return symbol(sym.WIDTH);
 									case "YELLOW":
-										return symbol(sym.TCOLOR, Tcolor.YELLOW);
+										return symbol(sym.TCOLOR, lexema);
 									default:
 										return symbol(sym.IDENTI, lexema);
 								}
