@@ -346,56 +346,55 @@ public class FormLexer implements java_cup.runtime.Scanner {
 
   /* user code: */
 
-	private StringBuilder texto = new StringBuilder();
-	private int estadoAnterior = YYINITIAL;
-	private int linea;
-	private int columna;
-	private List<MensajeError> errores;
-	
-	private Symbol symbol(int type){
-		return new Symbol(type, yyline+1, yycolumn+1);
-	}
-    	
-	private Symbol symbol(int type, Object object){
-		return new Symbol(type, yyline+1, yycolumn+1, object);
-	}
+  private final StringBuilder texto = new StringBuilder();
+  private int estadoAnterior = YYINITIAL;
+  private int linea;
+  private int columna;
+  private List<MensajeError> errores;
 
-	private void iniciarCadena(){
-		yybegin(STRING);
-    		texto.setLength(0);
-    		linea = yyline+1;
-    		columna = yycolumn+1;
-    	}
-    	
-    	private Symbol reportarCadena(){
-    		return new Symbol(sym.CADENA, linea, columna, texto.toString());
-    	}
-    	
-    	private void reportarErrorLexico(){
-    		int estado = yystate();
-    		MensajeError error = new MensajeError(TipoError.LEXICO);
-            	error.setColumna(yycolumn+1);
-            	error.setLinea(yyline+1);
-    		if (estado == STRING){
-    			error.setDescripcion("cadena no cerrada");
-    			error.setLexema(texto.toString());
-    		} else {
-    			error.setDescripcion("simbolo no reconocido");
-              		error.setLexema(yytext());
-    		}
-    		errores.add(error);
-    	}
-    	
-    	private void cambiarAInstruccion(){
-    		estadoAnterior = INSTRUCCION;
-    		yybegin(INSTRUCCION);
-    	}
-    	
-    	private void regresarEstado(){
-    		yybegin(estadoAnterior);
-    		estadoAnterior = YYINITIAL;
-    	}
-    	
+  private Symbol symbol(int type) {
+    return new Symbol(type, yyline + 1, yycolumn + 1);
+  }
+
+  private Symbol symbol(int type, Object object) {
+    return new Symbol(type, yyline + 1, yycolumn + 1, object);
+  }
+
+  private void iniciarCadena() {
+    yybegin(STRING);
+    texto.setLength(0);
+    linea = yyline + 1;
+    columna = yycolumn + 1;
+  }
+
+  private Symbol reportarCadena() {
+    return new Symbol(sym.CADENA, linea, columna, texto.toString());
+  }
+
+  private void reportarErrorLexico() {
+    int estado = yystate();
+    MensajeError error = new MensajeError(TipoError.LEXICO);
+    error.setColumna(yycolumn + 1);
+    error.setLinea(yyline + 1);
+    if (estado == STRING) {
+      error.setDescripcion("cadena no cerrada");
+      error.setLexema(texto.toString());
+    } else {
+      error.setDescripcion("simbolo no reconocido");
+      error.setLexema(yytext());
+    }
+    errores.add(error);
+  }
+
+  private void cambiarAInstruccion() {
+    estadoAnterior = INSTRUCCION;
+    yybegin(INSTRUCCION);
+  }
+
+  private void regresarEstado() {
+    yybegin(estadoAnterior);
+    estadoAnterior = YYINITIAL;
+  }
 
 
   /**

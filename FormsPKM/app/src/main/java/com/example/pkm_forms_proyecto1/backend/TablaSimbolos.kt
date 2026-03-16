@@ -9,6 +9,10 @@ class TablaSimbolos {
         tabla[id] = simboloTabla
     }
 
+    fun obtenerSimbolo(id: String): SimboloTabla{
+        return tabla[id]!!
+    }
+
     fun cambiarValor(id: String, simboloTabla: SimboloTabla){
         tabla[id] = simboloTabla
     }

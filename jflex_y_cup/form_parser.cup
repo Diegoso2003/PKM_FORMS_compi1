@@ -1,6 +1,9 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
+import com.example.pkm_forms_proyecto1.enums.Tipo;
+import com.example.pkm_forms_proyecto1.backend.nodos.*;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.*;
 
 terminal			ASIGN, BACKGROUND, BORDER, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW, DROP_QUESTION, 
 				ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HORIZONTAL, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MODULO, MULTI, 
@@ -16,11 +19,12 @@ terminal String 		CADENA, HEXADECIMAL, IDENTI
 				;
 non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, atributos_estilo, 
 				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, ciclo, color, columna_tabla, columnas_tabla, condicional, condiciones, 
-				condicion, condiciones_and, condiciones_or, correct, declaracion, delimit, elemento, elementos, estilo, expr, exprs, factor, fila_tabla, filas_tabla, 
-				for, formulario, instruccion, instrucciones, opciones, orientacion, parametros, poten, pregunta, seccion, sino, tabla, term, texto, tipo_pregunta, 
-				unario, variable
+				condicion, condiciones_and, condiciones_or, correct, declaracion, delimit, elemento, elementos, estilo, exprs, fila_tabla, filas_tabla, 
+				for, formulario, instruccion, instrucciones, opciones, orientacion, parametros, pregunta, seccion, sino, tabla, texto, tipo_pregunta, 
+				variable
 				;
-
+non terminal NodoExpresion	expr, factor, poten, term, unario
+				;
 start with formulario;
 
 formulario ::= formulario instruccion
@@ -198,36 +202,35 @@ for ::= IDENTI ASIGN expr PUNTO_COMA condiciones PUNTO_COMA IDENTI ASIGN expr
 	| IDENTI IN NUMERO RANGO NUMERO
 	;
 	
-expr ::= expr SUMA term
-        | expr RESTA term
-        | term
+expr ::= expr:n1 SUMA term:n3								{: RESULT = new Suma(n1, n3); :}
+        | expr:n1 RESTA term:n3								{: RESULT = new Resta(n1, n3); :}
+        | term:n1									{: RESULT = n1; :}
         ;
 
-term ::= term MULTI unario
-        | term DIVIS unario
-        | unario
+term ::= term:n1 MULTI unario:n3							{: RESULT = new Multiplicacion(n1, n3); :}
+        | term:n1 DIVIS unario:n3							{: RESULT = new Division(n1, n3); :}
+        | unario:n1									{: RESULT = n1; :}
         ;
         
-unario ::= SUMA poten
-	| RESTA poten
-	| poten
+unario ::= SUMA poten:n2								{: RESULT = n2; :}
+	| RESTA:n1 poten:n2								{: RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, n1left, n1right), n2); :}
+	| poten:n1									{: RESULT = n1; :}
 	;
 
-poten ::= poten POTEN factor
-	| poten MODULO factor
-	| factor
+poten ::= poten:n1 POTEN factor:n3							{: RESULT = new Potencia(n1, n3); :}
+	| poten:n1 MODULO factor:n3							{: RESULT = new Modulo(n1, n3); :}
+	| factor:n1									{: RESULT = n1; :}
 	;
 
-factor ::= NUMERO
-	| DECIMAL
-	| IDENTI
-	| CADENA
-	| COMODIN
-        | PARENAPER expr PARENCERRA
+factor ::= NUMERO:n1									{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
+	| DECIMAL:n1									{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
+	| IDENTI:n1									{: RESULT = new Identificador(n1, n1left, n1right); :}
+	| CADENA:n1									{: RESULT = new Expresion(n1, Tipo.STRING, n1left, n1right); :}
+	| COMODIN:n1									{: RESULT = new Comodin(n1left, n1right); :}
+        | PARENAPER expr:n1 PARENCERRA							{: RESULT = n1; :}
         ;
         
 condicion ::= expr OPERACOMP expr
-	| expr
 	| OPERALOGINOT PARENAPER condicion PARENCERRA
 	;
 	
@@ -241,4 +244,6 @@ condiciones_or ::= condicion OPERALOGIOR condicion
 	
 condiciones ::= condiciones_and
 	| condiciones_or
+	| expr
+	| condicion
 	;
