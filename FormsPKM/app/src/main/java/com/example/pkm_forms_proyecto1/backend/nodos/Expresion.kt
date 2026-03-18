@@ -7,7 +7,7 @@ class Expresion(val objeto: Any, val tipo: Tipo) :
     NodoExpresion() {
     var linea: Int = 0
     var columna: Int = 0
-    var nombreID: String = ""
+    var nombreID: String? = null
 
     constructor(objeto: Any, tipo: Tipo, linea: Int, columna: Int):this(objeto, tipo){
         this.linea = linea
@@ -15,6 +15,6 @@ class Expresion(val objeto: Any, val tipo: Tipo) :
     }
 
     override fun evaluarNodo(infoCalculo: InfoCalculo): Expresion {
-        TODO("Not yet implemented")
+        return this
     }
 }

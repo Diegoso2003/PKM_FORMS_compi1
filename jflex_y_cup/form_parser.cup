@@ -1,9 +1,92 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
+import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
+import com.example.pkm_forms_proyecto1.backend.Formulario;
 import com.example.pkm_forms_proyecto1.backend.nodos.*;
 import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.*;
+import com.example.pkm_forms_proyecto1.enums.TipoError;
+
+parser code {:
+
+    private FormLexer lex;
+    private Formulario formulario;
+
+    public FormParser(FormLexer lex, Formulario formulario){
+        super(lex);
+        this.formulario = formulario;
+    }
+
+    public void syntax_error(Symbol cur_token){
+        MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        
+        if(cur_token.value != null) {
+        	error.setLexema(cur_token.value.toString());
+        } else {
+        	error.setLexema(symbl_name_from_id(cur_token.sym));
+        }
+	error.setLinea(cur_token.left);
+	error.setColumna(cur_token.right);
+        
+        if( expected_token_ids().isEmpty()  ){
+        	error.setDescripcion("ya no se esperaba ningún símbolo");
+        } else {
+        	StringBuilder mssBuilder = new StringBuilder();
+            	mssBuilder.append("Se esperaba: ");
+            	for(Integer expected_token_id : expected_token_ids() ){ 
+                	if(!symbl_name_from_id(expected_token_id).equals("error")){
+                    	mssBuilder.append(symbl_name_from_id(expected_token_id));
+                    	mssBuilder.append(", ");
+                	}
+            	}
+            	error.setDescripcion(mssBuilder.toString());
+        }
+        formulario.getListaErrores().add(error);
+    }
+
+    public void report_error(String message, Object info){
+        try{
+            	Symbol cur_token = (Symbol) info;
+            	MensajeError error = new MensajeError(TipoError.SINTACTICO);
+            	if(cur_token != null){
+            		error.setLinea(cur_token.left);
+            		error.setColumna(cur_token.right);
+        		if(cur_token.value != null){
+        			error.setLexema(cur_token.value.toString());
+        		} else {
+        			error.setLexema(symbl_name_from_id(cur_token.sym));
+        		}
+            	}
+
+            	if(message != null){
+                	error.setDescripcion(message);
+            	}
+            formulario.getListaErrores().add(error);
+        } catch (Exception e){
+        	MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        	if(message != null){
+                	error.setDescripcion(message);
+                	formulario.getListaErrores().add(error);
+            	}
+        }
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token){
+        MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        String tokenInfo = "";
+    if (cur_token != null) {
+        tokenInfo += cur_token.left + ", " + cur_token.right;
+        // Si tiene valor asociado
+        if (cur_token.value != null) {
+            tokenInfo += " ('" + cur_token.value + "')";
+        }
+    }
+        error.setDescripcion("Error que no se puede recuperar" + tokenInfo);
+        formulario.getListaErrores().add(error);
+    }
+
+:}
 
 terminal			ASIGN, BACKGROUND, BORDER, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW, DROP_QUESTION, 
 				ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HORIZONTAL, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MODULO, MULTI, 
@@ -202,36 +285,37 @@ for ::= IDENTI ASIGN expr PUNTO_COMA condiciones PUNTO_COMA IDENTI ASIGN expr
 	| IDENTI IN NUMERO RANGO NUMERO
 	;
 	
-expr ::= expr:n1 SUMA term:n3								{: RESULT = new Suma(n1, n3); :}
-        | expr:n1 RESTA term:n3								{: RESULT = new Resta(n1, n3); :}
-        | term:n1									{: RESULT = n1; :}
+expr ::= expr:n1 SUMA term:n3									{: RESULT = new Suma(n1, n3); :}
+        | expr:n1 RESTA term:n3									{: RESULT = new Resta(n1, n3); :}
+        | term:n1										{: RESULT = n1; :}
         ;
 
-term ::= term:n1 MULTI unario:n3							{: RESULT = new Multiplicacion(n1, n3); :}
-        | term:n1 DIVIS unario:n3							{: RESULT = new Division(n1, n3); :}
-        | unario:n1									{: RESULT = n1; :}
+term ::= term:n1 MULTI unario:n3								{: RESULT = new Multiplicacion(n1, n3); :}
+        | term:n1 DIVIS unario:n3								{: RESULT = new Division(n1, n3); :}
+        | unario:n1										{: RESULT = n1; :}
         ;
         
-unario ::= SUMA poten:n2								{: RESULT = n2; :}
-	| RESTA:n1 poten:n2								{: RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, n1left, n1right), n2); :}
-	| poten:n1									{: RESULT = n1; :}
+unario ::= SUMA poten:n2									{: RESULT = n2; :}
+	| RESTA:n1 poten:n2									{: RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, n1left, n1right), n2); :}
+	| poten:n1										{: RESULT = n1; :}
 	;
 
-poten ::= poten:n1 POTEN factor:n3							{: RESULT = new Potencia(n1, n3); :}
-	| poten:n1 MODULO factor:n3							{: RESULT = new Modulo(n1, n3); :}
-	| factor:n1									{: RESULT = n1; :}
+poten ::= poten:n1 POTEN factor:n3								{: RESULT = new Potencia(n1, n3); :}
+	| poten:n1 MODULO factor:n3								{: RESULT = new Modulo(n1, n3); :}
+	| factor:n1										{: RESULT = n1; :}
 	;
 
-factor ::= NUMERO:n1									{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
-	| DECIMAL:n1									{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
-	| IDENTI:n1									{: RESULT = new Identificador(n1, n1left, n1right); :}
-	| CADENA:n1									{: RESULT = new Expresion(n1, Tipo.STRING, n1left, n1right); :}
-	| COMODIN:n1									{: RESULT = new Comodin(n1left, n1right); :}
-        | PARENAPER expr:n1 PARENCERRA							{: RESULT = n1; :}
+factor ::= NUMERO:n1										{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
+	| DECIMAL:n1										{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
+	| IDENTI:n1										{: RESULT = new Identificador(n1, n1left, n1right); :}
+	| CADENA:n1										{: RESULT = new Expresion(n1, Tipo.STRING, n1left, n1right); :}
+	| COMODIN:n1										{: RESULT = new Comodin(n1left, n1right); :}
+        | PARENAPER expr:n1 PARENCERRA								{: RESULT = n1; :}
         ;
         
 condicion ::= expr OPERACOMP expr
 	| OPERALOGINOT PARENAPER condicion PARENCERRA
+	| expr
 	;
 	
 condiciones_and ::= condicion OPERALOGIAND condicion
@@ -244,6 +328,5 @@ condiciones_or ::= condicion OPERALOGIOR condicion
 	
 condiciones ::= condiciones_and
 	| condiciones_or
-	| expr
 	| condicion
 	;

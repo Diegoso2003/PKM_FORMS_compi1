@@ -22,7 +22,7 @@ class Comodin(val linea: Int, val columna: Int) : NodoExpresion() {
             mensaje.columna = infoCalculo.columna
             mensaje.lexema = "draw"
             mensaje.descripcion =
-                "El número de argumentos no coincide con los '?' definidos en la pregunta special"
+                "El número de argumentos pasados no coincide con los '?' definidos en la pregunta special"
             return Expresion("Error", Tipo.ERROR_SEMANTICO)
         }
         return infoCalculo.listaComodin!!.removeFirst()

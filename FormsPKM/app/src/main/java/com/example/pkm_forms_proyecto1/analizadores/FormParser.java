@@ -6,9 +6,12 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
+import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
+import com.example.pkm_forms_proyecto1.backend.Formulario;
 import com.example.pkm_forms_proyecto1.backend.nodos.*;
 import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.*;
+import com.example.pkm_forms_proyecto1.enums.TipoError;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -599,6 +602,86 @@ public class FormParser extends java_cup.runtime.lr_parser {
 
   /** <code>error</code> Symbol index. */
   public int error_sym() {return 1;}
+
+
+
+
+    private FormLexer lex;
+    private Formulario formulario;
+
+    public FormParser(FormLexer lex, Formulario formulario){
+        super(lex);
+        this.formulario = formulario;
+    }
+
+    public void syntax_error(Symbol cur_token){
+        MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        
+        if(cur_token.value != null) {
+        	error.setLexema(cur_token.value.toString());
+        } else {
+        	error.setLexema(symbl_name_from_id(cur_token.sym));
+        }
+	error.setLinea(cur_token.left);
+	error.setColumna(cur_token.right);
+        
+        if( expected_token_ids().isEmpty()  ){
+        	error.setDescripcion("ya no se esperaba ningún símbolo");
+        } else {
+        	StringBuilder mssBuilder = new StringBuilder();
+            	mssBuilder.append("Se esperaba: ");
+            	for(Integer expected_token_id : expected_token_ids() ){ 
+                	if(!symbl_name_from_id(expected_token_id).equals("error")){
+                    	mssBuilder.append(symbl_name_from_id(expected_token_id));
+                    	mssBuilder.append(", ");
+                	}
+            	}
+            	error.setDescripcion(mssBuilder.toString());
+        }
+        formulario.getListaErrores().add(error);
+    }
+
+    public void report_error(String message, Object info){
+        try{
+            	Symbol cur_token = (Symbol) info;
+            	MensajeError error = new MensajeError(TipoError.SINTACTICO);
+            	if(cur_token != null){
+            		error.setLinea(cur_token.left);
+            		error.setColumna(cur_token.right);
+        		if(cur_token.value != null){
+        			error.setLexema(cur_token.value.toString());
+        		} else {
+        			error.setLexema(symbl_name_from_id(cur_token.sym));
+        		}
+            	}
+
+            	if(message != null){
+                	error.setDescripcion(message);
+            	}
+            formulario.getListaErrores().add(error);
+        } catch (Exception e){
+        	MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        	if(message != null){
+                	error.setDescripcion(message);
+                	formulario.getListaErrores().add(error);
+            	}
+        }
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token){
+        MensajeError error = new MensajeError(TipoError.SINTACTICO);
+        String tokenInfo = "";
+    if (cur_token != null) {
+        tokenInfo += cur_token.left + ", " + cur_token.right;
+        // Si tiene valor asociado
+        if (cur_token.value != null) {
+            tokenInfo += " ('" + cur_token.value + "')";
+        }
+    }
+        error.setDescripcion("Error que no se puede recuperar" + tokenInfo);
+        formulario.getListaErrores().add(error);
+    }
+
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -1714,7 +1797,7 @@ class CUP$FormParser$actions {
 		int n1left = ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()).left;
 		int n1right = ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()).right;
 		Object n1 = (Object)((java_cup.runtime.Symbol) CUP$FormParser$stack.peek()).value;
-		 RESULT = new Comodin(n1left, n1right);
+		 RESULT = new Comodin(n1left, n1right); 
               CUP$FormParser$result = parser.getSymbolFactory().newSymbol("factor",45, ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()), RESULT);
             }
           return CUP$FormParser$result;
