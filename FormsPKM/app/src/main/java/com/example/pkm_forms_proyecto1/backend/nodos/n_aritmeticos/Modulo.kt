@@ -1,5 +1,6 @@
 package com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos
 
+import com.example.pkm_forms_proyecto1.backend.Simbolo
 import com.example.pkm_forms_proyecto1.backend.nodos.Expresion
 import com.example.pkm_forms_proyecto1.backend.nodos.NodoAritmetico
 import com.example.pkm_forms_proyecto1.backend.nodos.NodoExpresion
@@ -7,8 +8,8 @@ import com.example.pkm_forms_proyecto1.enums.Tipo
 import com.example.pkm_forms_proyecto1.excepciones.ErrorSemantico
 
 class Modulo(
-    nodoIzq: NodoExpresion, nodoDer: NodoExpresion
-) : NodoAritmetico(nodoIzq, nodoDer, "modulo") {
+    nodoIzq: NodoExpresion, nodoDer: NodoExpresion, simbolo: Simbolo
+) : NodoAritmetico(simbolo,nodoIzq, nodoDer, "modulo") {
     override fun realizarOperacion(
         expr1: Expresion, expr2: Expresion
     ): Expresion {
@@ -18,7 +19,7 @@ class Modulo(
             if (valor2 == 0.0) {
                 throw ErrorSemantico(mensajeDeError(expr2, "El modulo entre cero no es permitido."))
             }
-            return Expresion((valor1 % valor2), Tipo.NUMBER, expr1.linea, expr1.columna)
+            return Expresion((valor1 % valor2), Tipo.NUMBER, simbolo)
         }
         val exprAux = if (expr1.tipo != Tipo.NUMBER) expr1 else expr2
         throw ErrorSemantico(mensajeDeError(exprAux))

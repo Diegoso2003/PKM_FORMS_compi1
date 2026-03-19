@@ -8,77 +8,79 @@ package com.example.pkm_forms_proyecto1.analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int TCOLOR = 59;
-  public static final int OPERACOMP = 38;
-  public static final int NUMERO = 66;
-  public static final int TIPO = 62;
-  public static final int WIDTH = 64;
-  public static final int LLAVE_APER = 29;
-  public static final int ELEMENTS = 18;
-  public static final int OPEN_QUESTION = 37;
-  public static final int RESTA = 53;
-  public static final int IDENTI = 70;
-  public static final int DOS_PUNTOS = 15;
-  public static final int STYLES = 56;
-  public static final int RANGO = 52;
-  public static final int PARENCERRA = 45;
-  public static final int ORIENTATION = 43;
-  public static final int FONT = 20;
-  public static final int FOR = 21;
-  public static final int POKEMON = 48;
-  public static final int POINTY = 47;
-  public static final int MULTIPLE_QUESTION = 35;
-  public static final int TEXT_SIZE = 61;
-  public static final int POINTX = 46;
-  public static final int DRAW = 16;
-  public static final int HORIZONTAL = 25;
-  public static final int DROP_QUESTION = 17;
-  public static final int DELIMIT = 12;
-  public static final int GROSOR = 23;
-  public static final int IN = 27;
-  public static final int CORRECT = 11;
-  public static final int SUMA = 57;
-  public static final int VERTICAL = 63;
-  public static final int BACKGROUND = 3;
-  public static final int IF = 26;
-  public static final int MAYOR_Q = 31;
-  public static final int PUNTO_COMA = 51;
-  public static final int CORCHEAPER = 9;
-  public static final int POTEN = 49;
-  public static final int DECIMAL = 67;
-  public static final int EOF = 0;
-  public static final int TABLE = 58;
-  public static final int MENOR_Q = 32;
-  public static final int error = 1;
-  public static final int COMA = 5;
-  public static final int CADENA = 68;
-  public static final int MODULO = 33;
-  public static final int SELECT_QUESTION = 55;
-  public static final int NUMBER = 36;
-  public static final int HEIGHT = 24;
-  public static final int OPERALOGINOT = 41;
   public static final int OPERALOGIAND = 39;
-  public static final int LLAVE_CERRA = 30;
-  public static final int COLOR = 8;
-  public static final int CORCHECERRA = 10;
-  public static final int PARENAPER = 44;
-  public static final int DIVIS = 13;
-  public static final int ELSE = 19;
-  public static final int PUNTO = 50;
-  public static final int OPERALOGIOR = 40;
-  public static final int CONTENT = 7;
-  public static final int WHILE = 65;
+  public static final int SELECT_QUESTION = 54;
+  public static final int HEXADECIMAL = 68;
+  public static final int TEXT_SIZE = 59;
+  public static final int POKEMON = 71;
+  public static final int MENOR_IGUAL = 32;
+  public static final int MENOR_QUE = 33;
+  public static final int TABLE = 57;
+  public static final int DIVIS = 14;
+  public static final int DROP_QUESTION = 18;
+  public static final int DIFERENTE = 13;
+  public static final int ELEMENTS = 19;
+  public static final int DRAW = 17;
+  public static final int OPEN_QUESTION = 38;
+  public static final int LLAVE_APER = 28;
+  public static final int TORIENTACION = 64;
+  public static final int NUMERO = 65;
+  public static final int MAYOR_QUE = 31;
+  public static final int LLAVE_CERRA = 29;
+  public static final int FONT = 21;
+  public static final int BACKGROUND = 3;
+  public static final int TEXT = 58;
+  public static final int MULTI = 35;
+  public static final int FUENTE = 72;
+  public static final int DOS_PUNTOS = 16;
+  public static final int OPERALOGINOT = 41;
+  public static final int WIDTH = 60;
+  public static final int PUNTO_COMA = 50;
+  public static final int STYLES = 55;
+  public static final int NUMBER = 37;
+  public static final int COMA = 5;
+  public static final int MODULO = 34;
+  public static final int DELIMIT = 12;
+  public static final int IGUAL = 25;
+  public static final int WHILE = 61;
+  public static final int TIPO = 63;
+  public static final int DECIMAL = 66;
+  public static final int DO = 15;
+  public static final int FOR = 22;
   public static final int COMODIN = 6;
-  public static final int BORDER = 4;
-  public static final int HEXADECIMAL = 69;
+  public static final int ORIENTATION = 43;
+  public static final int ELSE = 20;
+  public static final int MULTIPLE_QUESTION = 36;
+  public static final int CORCHEAPER = 9;
+  public static final int CORRECT = 11;
+  public static final int CONTENT = 7;
+  public static final int EOF = 0;
+  public static final int PUNTO = 49;
+  public static final int SUMA = 56;
   public static final int ASIGN = 2;
-  public static final int MULTI = 34;
-  public static final int TEXT = 60;
-  public static final int SECTION = 54;
-  public static final int LABEL = 28;
+  public static final int LABEL = 27;
+  public static final int POTEN = 48;
+  public static final int IN = 26;
+  public static final int error = 1;
+  public static final int RESTA = 52;
+  public static final int IF = 24;
+  public static final int COLOR = 8;
+  public static final int PARENAPER = 44;
+  public static final int PARENCERRA = 45;
+  public static final int CORCHECERRA = 10;
+  public static final int BORDER = 4;
+  public static final int OPERALOGIOR = 40;
+  public static final int HEIGHT = 23;
+  public static final int RANGO = 51;
+  public static final int IDENTI = 69;
+  public static final int TCOLOR = 70;
+  public static final int CADENA = 67;
+  public static final int GROSOR = 62;
+  public static final int POINTY = 47;
   public static final int OPTIONS = 42;
-  public static final int DO = 14;
-  public static final int FUENTE = 22;
+  public static final int POINTX = 46;
+  public static final int MAYOR_IGUAL = 30;
+  public static final int SECTION = 53;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -93,6 +95,7 @@ public class sym {
   "CORCHECERRA",
   "CORRECT",
   "DELIMIT",
+  "DIFERENTE",
   "DIVIS",
   "DO",
   "DOS_PUNTOS",
@@ -102,23 +105,22 @@ public class sym {
   "ELSE",
   "FONT",
   "FOR",
-  "FUENTE",
-  "GROSOR",
   "HEIGHT",
-  "HORIZONTAL",
   "IF",
+  "IGUAL",
   "IN",
   "LABEL",
   "LLAVE_APER",
   "LLAVE_CERRA",
-  "MAYOR_Q",
-  "MENOR_Q",
+  "MAYOR_IGUAL",
+  "MAYOR_QUE",
+  "MENOR_IGUAL",
+  "MENOR_QUE",
   "MODULO",
   "MULTI",
   "MULTIPLE_QUESTION",
   "NUMBER",
   "OPEN_QUESTION",
-  "OPERACOMP",
   "OPERALOGIAND",
   "OPERALOGIOR",
   "OPERALOGINOT",
@@ -128,7 +130,6 @@ public class sym {
   "PARENCERRA",
   "POINTX",
   "POINTY",
-  "POKEMON",
   "POTEN",
   "PUNTO",
   "PUNTO_COMA",
@@ -139,18 +140,21 @@ public class sym {
   "STYLES",
   "SUMA",
   "TABLE",
-  "TCOLOR",
   "TEXT",
   "TEXT_SIZE",
-  "TIPO",
-  "VERTICAL",
   "WIDTH",
   "WHILE",
+  "GROSOR",
+  "TIPO",
+  "TORIENTACION",
   "NUMERO",
   "DECIMAL",
   "CADENA",
   "HEXADECIMAL",
-  "IDENTI"
+  "IDENTI",
+  "TCOLOR",
+  "POKEMON",
+  "FUENTE"
   };
 }
 

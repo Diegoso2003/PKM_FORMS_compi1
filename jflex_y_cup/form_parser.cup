@@ -2,11 +2,61 @@ package com.example.pkm_forms_proyecto1.analizadores;
 
 import java_cup.runtime.*;
 import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
+import com.example.pkm_forms_proyecto1.backend.Asignacion;
+import com.example.pkm_forms_proyecto1.backend.Declaracion;
+import com.example.pkm_forms_proyecto1.backend.atributos.contenedor.PointX;
+import com.example.pkm_forms_proyecto1.backend.atributos.contenedor.PointY;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.AColor;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.AtributoEstilo;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.Background;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.Borde;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.FontFamily;
+import com.example.pkm_forms_proyecto1.backend.atributos.estilo.TextSize;
+import com.example.pkm_forms_proyecto1.backend.atributos.general.Height;
+import com.example.pkm_forms_proyecto1.backend.atributos.general.Style;
+import com.example.pkm_forms_proyecto1.backend.atributos.general.Width;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.Label;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.opciones.Correct;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.opciones.ListaOpciones;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.opciones.Options;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.opciones.ParamOpci;
+import com.example.pkm_forms_proyecto1.backend.atributos.pregunta.opciones.PokeApi;
+import com.example.pkm_forms_proyecto1.backend.atributos.seccion.AtriOrientacion;
+import com.example.pkm_forms_proyecto1.backend.atributos.tabla.ElementosTabla;
+import com.example.pkm_forms_proyecto1.backend.atributos.texto.Content;
+import com.example.pkm_forms_proyecto1.backend.color.ColorCadena;
+import com.example.pkm_forms_proyecto1.backend.color.ColorHSL;
+import com.example.pkm_forms_proyecto1.backend.color.ColorRGB;
+import com.example.pkm_forms_proyecto1.backend.color.TipoColor;
+import com.example.pkm_forms_proyecto1.backend.condiciones.*;
+import com.example.pkm_forms_proyecto1.backend.elementos.Texto;
+import com.example.pkm_forms_proyecto1.backend.elementos.contenedores.Seccion;
+import com.example.pkm_forms_proyecto1.backend.elementos.contenedores.Tabla;
+import com.example.pkm_forms_proyecto1.backend.elementos.preguntas.Pregunta;
+import com.example.pkm_forms_proyecto1.backend.elementos.preguntas.PreguntaDesplegable;
+import com.example.pkm_forms_proyecto1.backend.elementos.preguntas.PreguntaAbierta;
+import com.example.pkm_forms_proyecto1.backend.elementos.preguntas.PreguntaSelUnica;
+import com.example.pkm_forms_proyecto1.backend.elementos.preguntas.PreguntaSelMultiple;
+import com.example.pkm_forms_proyecto1.backend.nodos.elementos.ElementoSimple;
+import com.example.pkm_forms_proyecto1.backend.nodos.elementos.FuncionDraw;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Division;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Modulo;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Multiplicacion;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Potencia;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Resta;
+import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.Suma;
+import com.example.pkm_forms_proyecto1.backend.operador_logico.OperadorAnd;
+import com.example.pkm_forms_proyecto1.backend.operador_logico.OperadorOr;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
+import com.example.pkm_forms_proyecto1.enums.TLetra;
+import com.example.pkm_forms_proyecto1.enums.Orientacion;
 import com.example.pkm_forms_proyecto1.backend.Formulario;
+import com.example.pkm_forms_proyecto1.backend.Simbolo;
 import com.example.pkm_forms_proyecto1.backend.nodos.*;
-import com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos.*;
+import com.example.pkm_forms_proyecto1.backend.atributos.Atributo;
+import com.example.pkm_forms_proyecto1.enums.TipoBorde;
 import com.example.pkm_forms_proyecto1.enums.TipoError;
+import java.util.LinkedList;
 
 parser code {:
 
@@ -88,245 +138,290 @@ parser code {:
 
 :}
 
-terminal			ASIGN, BACKGROUND, BORDER, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIVIS, DO, DOS_PUNTOS, DRAW, DROP_QUESTION, 
-				ELEMENTS, ELSE, FONT, FOR, FUENTE, GROSOR, HEIGHT, HORIZONTAL, IF, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_Q, MENOR_Q, MODULO, MULTI, 
-				MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPERACOMP, OPERALOGIAND, OPERALOGIOR, OPERALOGINOT, OPTIONS, ORIENTATION, PARENAPER, PARENCERRA, POINTX, 
-				POINTY, POKEMON, POTEN, PUNTO, PUNTO_COMA, RANGO, RESTA, SECTION, SELECT_QUESTION, STYLES, SUMA, TABLE, TCOLOR, TEXT, TEXT_SIZE, TIPO, VERTICAL, 
-				WIDTH, WHILE
-				;
-terminal Integer		NUMERO
-				;
-terminal Double			DECIMAL
-				;
-terminal String 		CADENA, HEXADECIMAL, IDENTI
-				;
-non terminal			atributo_elemento, atributo_estilo, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, atributos_estilo, 
-				atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta, ciclo, color, columna_tabla, columnas_tabla, condicional, condiciones, 
-				condicion, condiciones_and, condiciones_or, correct, declaracion, delimit, elemento, elementos, estilo, exprs, fila_tabla, filas_tabla, 
-				for, formulario, instruccion, instrucciones, opciones, orientacion, parametros, pregunta, seccion, sino, tabla, texto, tipo_pregunta, 
-				variable
-				;
-non terminal NodoExpresion	expr, factor, poten, term, unario
-				;
+terminal				ASIGN, BACKGROUND, BORDER, COMA, COMODIN, CONTENT, COLOR, CORCHEAPER, CORCHECERRA, CORRECT, DELIMIT, DIFERENTE, DIVIS, DO, DOS_PUNTOS, DRAW, DROP_QUESTION, 
+					ELEMENTS, ELSE, FONT, FOR, HEIGHT, IF, IGUAL, IN, LABEL, LLAVE_APER, LLAVE_CERRA, MAYOR_IGUAL, MAYOR_QUE, MENOR_IGUAL, MENOR_QUE, MODULO, MULTI, 
+					MULTIPLE_QUESTION, NUMBER, OPEN_QUESTION, OPERALOGIAND, OPERALOGIOR, OPERALOGINOT, OPTIONS, ORIENTATION, PARENAPER, PARENCERRA, POINTX, 
+					POINTY, POTEN, PUNTO, PUNTO_COMA, RANGO, RESTA, SECTION, SELECT_QUESTION, STYLES, SUMA, TABLE, TEXT, TEXT_SIZE,
+					WIDTH, WHILE
+					;
+terminal TipoBorde			GROSOR
+					;
+terminal Tipo				TIPO
+					;
+terminal Orientacion			TORIENTACION
+					;
+terminal Integer			NUMERO
+					;
+terminal Double				DECIMAL
+					;
+terminal String 			CADENA, HEXADECIMAL, IDENTI, TCOLOR, POKEMON
+					;
+terminal TLetra				FUENTE
+					;
+non terminal				delimit,
+					for, sino, 
+					variable
+					;
+non terminal Accion			asignacion, ciclo, condicional, declaracion, instruccion
+					;
+non terminal LinkedList<Accion>		bloque, formulario, instrucciones
+					;
+non terminal Condicion			condicion, condiciones ,condiciones_and, condiciones_or
+					;
+non terminal Pregunta 			tipo_pregunta
+					;
+non terminal ParamOpci			opciones
+					;
+non terminal NodoElemento		columna_tabla, elemento, pregunta, seccion, tabla, texto
+					;
+non terminal LinkedList<NodoElemento> 	columnas_tabla, elementos, fila_tabla
+					;
+non terminal 
+LinkedList<LinkedList<NodoElemento>>	filas_tabla
+					;
+non terminal TipoColor			color
+					;
+non terminal Atributo			atributo_elemento, atributo_general, atributo_seccion, atributo_tabla, atributo_texto, atributo_pregunta, estilo
+					;
+non terminal AtributoEstilo		atributo_estilo
+					;
+non terminal LinkedList<Atributo>	atributos_seccion, atributos_tabla, atributos_texto, atributos_pregunta
+					;
+non terminal LinkedList<AtributoEstilo> atributos_estilo
+					;
+non terminal NodoExpresion		expr, factor, poten, term, unario
+					;
+non terminal LinkedList<NodoExpresion> 	parametros, correct, exprs
+					;
 start with formulario;
 
-formulario ::= formulario instruccion
-	| instruccion
-	| seccion
-	| tabla
+formulario ::= formulario:n1 instruccion:n2					{: n1.add(n2); RESULT = n1; :}
+	| formulario:n1 declaracion:n2						{: n1.add(n2); RESULT = n1; :}
+	| instruccion:n1							{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
+	| declaracion:n1							{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
 	;
 	
-instruccion ::= declaracion
-	| condicional
-	| ciclo
+instruccion ::= asignacion:n1							{: RESULT = n1; :}
+	| condicional:n1							{: RESULT = n1; :}
+	| ciclo:n1								{: RESULT = n1; :}
+	| tabla:n1								{: RESULT = n1; :}
+	| seccion:n1								{: RESULT = n1; :}
 	;
 	
-declaracion ::= TIPO IDENTI delimit
-	| TIPO IDENTI ASIGN variable delimit
-	| IDENTI ASIGN variable delimit
-	| error DELIMIT
+declaracion ::= TIPO:n1 IDENTI:n2 delimit					{: RESULT = new Declaracion(new Simbolo(n1left, n1right, n1.name()), null, n2, n1); :}
+	| TIPO:n1 IDENTI:n2 ASIGN variable:n3 delimit				{: RESULT = new Declaracion(new Simbolo(n1left, n1right, n1.name()), n3, n2, n1); :}
+	;
+	
+asignacion ::= IDENTI:n1 ASIGN variable:n3 delimit				{: RESULT = new Asignacion(new Simbolo(n1left, n1right, n1), n3, n1); :}
 	;
 	
 delimit ::= DELIMIT
 	|
 	;
 
-variable ::= pregunta
-	| expr
+variable ::= pregunta:n1							{: RESULT = n1; :}
+	| expr:n1								{: RESULT = n1; :}
 	;
 	
-parametros ::= expr
-	| parametros COMA expr
+parametros ::= expr:n1								{: RESULT = new LinkedList<NodoExpresion>(); RESULT.add(n1); :}
+	| parametros:n1 COMA expr:n3						{: n1.add(n3); RESULT = n1; :}
 	;
 	
-seccion ::= SECTION CORCHEAPER atributos_seccion CORCHECERRA
-	| SECTION CORCHEAPER error CORCHECERRA
+seccion ::= SECTION:n1 CORCHEAPER atributos_seccion:n3 CORCHECERRA		{: RESULT = new ElementoSimple(new Simbolo(n1left, n1right, "SECTION"), new Seccion(), n3); :}
 	;
 	
-atributos_seccion ::= atributo_seccion
-	| atributos_seccion COMA atributo_seccion
+atributos_seccion ::= atributo_seccion:n1					{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
+	| atributos_seccion:n1 COMA atributo_seccion:n3				{: n1.add(n3); RESULT = n1; :}
 	;
 	
-atributo_seccion ::= atributo_general
-	| atributo_elemento
-	| ORIENTATION DOS_PUNTOS orientacion
-	| ELEMENTS DOS_PUNTOS LLAVE_APER elementos LLAVE_CERRA
+atributo_seccion ::= atributo_general:n1					{: RESULT = n1; :}
+	| atributo_elemento:n1							{: RESULT = n1; :}
+	| ORIENTATION:n1 DOS_PUNTOS TORIENTACION:n3				{: RESULT = new AtriOrientacion(new Simbolo(n1left, n1right, "orientation"), n3); :}
+	| ELEMENTS:n1 DOS_PUNTOS LLAVE_APER elementos:n4 LLAVE_CERRA		{: RESULT = new ElementoSeccion(new Simbolo(n1left, n1right, "elements"), n4); :}
 	;
 	
-elementos ::= elemento
-	| elementos COMA elemento
+elementos ::= elemento:n1							{: RESULT = new LinkedList<NodoElemento>(); RESULT.add(n1); :}
+	| elementos:n1 COMA elemento:n3						{: n1.add(n3); RESULT = n1; :}
 	;
 	
-elemento ::= seccion
-	| tabla
-	| pregunta
-	| texto
-	| IDENTI PUNTO DRAW PARENAPER parametros PARENCERRA
+elemento ::= seccion:n1								{: RESULT = n1; :}
+	| tabla:n1								{: RESULT = n1; :}
+	| pregunta:n1								{: RESULT = n1; :}
+	| texto:n1								{: RESULT = n1; :}
+	| IDENTI:n1 PUNTO DRAW PARENAPER parametros:n5 PARENCERRA		{: RESULT = new FuncionDraw(new Simbolo(n1left, n1right, n1), n1, n5); :}
 	;
 	
-orientacion ::= VERTICAL
-	| HORIZONTAL
+atributo_general ::= WIDTH:n1 DOS_PUNTOS expr:n3				{: RESULT = new Width(new Simbolo(n1left, n1right, "width"), n3); :}
+	| HEIGHT:n1 DOS_PUNTOS expr:n3						{: RESULT = new Height(new Simbolo(n1left, n1right, "height"), n3); :}
+	| estilo:n1								{: RESULT = n1; :}
 	;
 	
-atributo_general ::= WIDTH DOS_PUNTOS expr
-	| HEIGHT DOS_PUNTOS expr
-	| estilo
+estilo ::= STYLES:n1 CORCHEAPER atributos_estilo:n3 CORCHECERRA			{: RESULT = new Style(new Simbolo(n1left, n1right, "STYLES"), n3); :}
 	;
 	
-estilo ::= STYLES CORCHEAPER atributos_estilo CORCHECERRA
+atributos_estilo ::= atributo_estilo:n1						{: RESULT = new LinkedList<AtributoEstilo>(); RESULT.add(n1); :}
+	| atributos_estilo:n1 COMA atributo_estilo:n3				{: n1.add(n3); RESULT = n1; :}
 	;
 	
-atributos_estilo ::= atributo_estilo
-	| atributos_estilo COMA atributo_estilo
+atributo_estilo ::= COLOR:n1 DOS_PUNTOS color:n3				{: RESULT = new AColor(new Simbolo(n1left, n1right, "\"color\""), n3); :}
+	| BACKGROUND:n1 DOS_PUNTOS color:n3					{: RESULT = new Background(new Simbolo(n1left, n1right, "\"background\""), n3); :}
+	| FONT:n1 DOS_PUNTOS FUENTE:n3						{: RESULT = new FontFamily(new Simbolo(n1left, n1right, "\"font family\""), n3); :}
+	| TEXT_SIZE:n1 DOS_PUNTOS expr:n3					{: RESULT = new TextSize(new Simbolo(n1left, n1right, "\"text size\""), n3); :}	
+	| BORDER:n1 DOS_PUNTOS 
+	PARENAPER expr:n4 COMA GROSOR:n6 COMA color:n7 PARENCERRA		{: RESULT = new Borde(new Simbolo(n1left, n1right, "\"border\""), n4, n6, n7); :}
 	;
 	
-atributo_estilo ::= COLOR DOS_PUNTOS color
-	| BACKGROUND DOS_PUNTOS color
-	| FONT DOS_PUNTOS FUENTE
-	| TEXT_SIZE DOS_PUNTOS expr
-	| BORDER DOS_PUNTOS PARENAPER expr COMA GROSOR COMA color PARENCERRA
+color ::= TCOLOR:n1								{: new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
+	| HEXADECIMAL:n1							{: new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
+	| PARENAPER expr:n3 COMA expr:n5 COMA expr:n7 PARENCERRA		{: new ColorRGB(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
+	| MENOR_QUE expr:n3 COMA expr:n5 COMA expr:n7 MAYOR_QUE			{: new ColorHSL(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
 	;
 	
-color ::= TCOLOR
-	| HEXADECIMAL
-	| PARENAPER expr COMA expr COMA expr PARENCERRA
-	| MENOR_Q expr COMA expr COMA expr MAYOR_Q
+atributo_elemento ::= POINTX:n1 DOS_PUNTOS expr:n3				{: RESULT = new PointX(new Simbolo(n1left, n1right, "pointX"), n3); :}
+	| POINTY:n1 DOS_PUNTOS expr:n3						{: RESULT = new PointY(new Simbolo(n1left, n1right, "pointY"), n3); :}
 	;
 	
-atributo_elemento ::= POINTX DOS_PUNTOS expr
-	| POINTY DOS_PUNTOS expr
+tabla ::= TABLE:n1 CORCHEAPER atributos_tabla:n3 CORCHECERRA			{: RESULT = new ElementoSimple(new Simbolo(n1left, n1right, "TABLE"), new Tabla(), n3); :}
 	;
 	
-tabla ::= TABLE CORCHEAPER atributos_tabla CORCHECERRA
+atributos_tabla ::= atributo_tabla:n1						{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
+	| atributos_tabla:n1 COMA atributo_tabla:n3				{: n1.add(n3); RESULT = n1; :}
 	;
 	
-atributos_tabla ::= atributo_tabla
-	| atributos_tabla COMA atributo_tabla
+atributo_tabla ::= atributo_general:n1						{: RESULT = n1; :}
+	| atributo_elemento:n1							{: RESULT = n1; :}
+	| ELEMENTS:n1 DOS_PUNTOS LLAVE_APER filas_tabla:n3 LLAVE_CERRA		{: RESULT = new ElementosTabla(new Simbolo(n1left, n1right, "elements"), n3); :}
 	;
 	
-atributo_tabla ::= atributo_general
-	| atributo_elemento
-	| ELEMENTS DOS_PUNTOS LLAVE_APER filas_tabla LLAVE_CERRA
+filas_tabla ::= fila_tabla:n1							{: RESULT = new LinkedList<LinkedList<NodoElemento>>(); RESULT.add(n1); :}
+	| filas_tabla:n1 COMA fila_tabla:n3					{: n1.add(n3); RESULT = n1; :}
 	;
 	
-filas_tabla ::= fila_tabla
-	| filas_tabla COMA fila_tabla
+fila_tabla ::= CORCHEAPER columnas_tabla:n2 CORCHECERRA				{: RESULT = n2; :}
 	;
 	
-fila_tabla ::= CORCHEAPER columnas_tabla CORCHECERRA
+columnas_tabla ::= columna_tabla:n1						{: RESULT = new LinkedList<NodoElemento>(); RESULT.add(n1); :}
+	| columnas_tabla:n1 COMA columna_tabla:n2				{: n1.add(n2); RESULT = n1; :}
 	;
 	
-columnas_tabla ::= columna_tabla
-	| columnas_tabla COMA columna_tabla
+columna_tabla ::= LLAVE_APER elemento:n2 LLAVE_CERRA				{: RESULT = n2; :}
 	;
 	
-columna_tabla ::= LLAVE_APER elemento LLAVE_CERRA
+texto ::= TEXT:n1 CORCHEAPER atributos_texto:n3 CORCHECERRA			{: RESULT = new ElementoSimple(new Simbolo(n1left, n1right, "TEXT"), new Texto(), n3); :}
 	;
 	
-texto ::= TEXT CORCHEAPER atributos_texto CORCHECERRA
+atributos_texto ::= atributo_texto:n1						{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
+	| atributos_texto:n1 COMA atributo_texto:n3				{: n1.add(n3); RESULT = n1; :}
 	;
 	
-atributos_texto ::= atributo_texto
-	| atributos_texto COMA atributo_texto
+atributo_texto ::= atributo_general:n1						{: RESULT = n1; :}
+	| CONTENT:n1 DOS_PUNTOS expr:n3						{: RESULT = new Content(new Simbolo(n1left, n1right, "content"), n3); :}
 	;
 	
-atributo_texto ::= atributo_general
-	| CONTENT DOS_PUNTOS expr
+pregunta ::= tipo_pregunta:n1 CORCHEAPER atributos_pregunta:n3 CORCHECERRA	{: RESULT = new ElementoSimple(new Simbolo(n1left, n1right, n1.getNombre()), n1, n3); :}
 	;
 	
-pregunta ::= tipo_pregunta CORCHEAPER atributos_pregunta CORCHECERRA
+tipo_pregunta ::= DROP_QUESTION							{: RESULT = new PreguntaDesplegable(); :}
+	| OPEN_QUESTION								{: RESULT = new PreguntaAbierta(); :}
+	| SELECT_QUESTION							{: RESULT = new PreguntaSelUnica(); :}
+	| MULTIPLE_QUESTION							{: RESULT = new PreguntaSelMultiple(); :}
 	;
 	
-tipo_pregunta ::= DROP_QUESTION
-	| OPEN_QUESTION
-	| SELECT_QUESTION
-	| MULTIPLE_QUESTION
-	;
-	
-atributos_pregunta ::= atributo_pregunta
-	| atributos_pregunta COMA atributo_pregunta
+atributos_pregunta ::= atributo_pregunta:n1					{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
+	| atributos_pregunta:n1 COMA atributo_pregunta:n3			{: n1.add(n3); RESULT = n1; :}
 	;
 
-atributo_pregunta ::= atributo_general
-	| CORRECT DOS_PUNTOS correct
-	| LABEL DOS_PUNTOS CADENA
-	| OPTIONS DOS_PUNTOS opciones
+atributo_pregunta ::= atributo_general:n1					{: RESULT = n1; :}
+	| CORRECT:n1 DOS_PUNTOS correct:n2					{: RESULT = new Correct(new Simbolo(n1left, n1right, "correct"), n2); :}
+	| LABEL:n1 DOS_PUNTOS expr:n3						{: RESULT = new Label(new Simbolo(n1left, n1right, "label"), n3); :}
+	| OPTIONS:n1 DOS_PUNTOS opciones:n3					{: RESULT = new Options(new Simbolo(n1left, n1right, "options"), n3); :}
 	;
 	
-correct ::= expr
-	| LLAVE_APER exprs LLAVE_CERRA
+correct ::= expr:n1								{: RESULT = new LinkedList<NodoExpresion>(); RESULT.add(n1); :}
+	| LLAVE_APER exprs:n2 LLAVE_CERRA					{: RESULT = n2; :}
 	;
 	
-opciones ::= LLAVE_APER exprs LLAVE_CERRA
-	| POKEMON PARENAPER NUMBER COMA expr COMA expr PARENCERRA
+opciones ::= LLAVE_APER exprs:n2 LLAVE_CERRA					{: RESULT = new ListaOpciones(n2); :}
+	| POKEMON:n1 PARENAPER NUMBER COMA expr:n5 COMA expr:n7 PARENCERRA	{: RESULT = new PokeApi(new Simbolo(n1left, n1left, n1), n5, n7); :}
 	;
 	
-exprs ::= expr
-	| exprs COMA expr
+exprs ::= expr:n1								{: RESULT = new LinkedList<NodoExpresion>(); RESULT.add(n1); :}
+	| exprs:n1 COMA expr:n3							{: n1.add(n3); RESULT = n1; :}
 	;
 
-condicional ::= IF PARENAPER condiciones PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA sino
+bloque ::= LLAVE_APER instrucciones:n3 LLAVE_CERRA				{: RESULT = n3; :}
+	| LLAVE_APER LLAVE_CERRA						{: RESULT = new LinkedList<Accion>(); :}
+	;
+
+condicional ::= IF:n1 PARENAPER condiciones:n3 PARENCERRA bloque:n5 sino:n6	{: RESULT = new Condicional(new Simbolo(n1left, n1right, "IF"), n3, n5, n6); :}
 	;
 	
-sino ::= ELSE LLAVE_APER instrucciones LLAVE_CERRA
-	| ELSE condicional
+sino ::= ELSE bloque:n2								{: RESULT = new Sino(n2); :}
+	| ELSE condicional:n2							{: RESULT = n2; :}
+	|
 	;
 	
-ciclo ::= WHILE PARENAPER condiciones PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA
-	| DO LLAVE_APER instrucciones LLAVE_CERRA WHILE PARENAPER condiciones PARENCERRA
-	| FOR PARENAPER for PARENCERRA LLAVE_APER instrucciones LLAVE_CERRA
+ciclo ::= WHILE:n1 PARENAPER condiciones:n3 PARENCERRA bloque:n5		{: RESULT = new CicloWhile(new Simbolo(n1left, n1right, "WHILE"), n3, n5); :}
+	| DO:n1 bloque:n2 WHILE PARENAPER condiciones:n5 PARENCERRA		{: RESULT = new CicloDoWhile(new Simbolo(new Simbolo(n1left, n1right, "DO"), n2, n5)); :}
+	| FOR:n1 PARENAPER for:n3 PARENCERRA bloque:n5				{: RESULT = new CicloFor(new Simbolo(n1left, n1right, "FOR"), n3, n5); :}
 	;
 	
-instrucciones ::= instruccion
-	| instrucciones instruccion
+instrucciones ::= instruccion:n1						{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
+	| instrucciones:n1 instruccion:n2					{: n1.add(n2); RESULT = n1; :}
 	;
 	
-for ::= IDENTI ASIGN expr PUNTO_COMA condiciones PUNTO_COMA IDENTI ASIGN expr
-	| IDENTI IN NUMERO RANGO NUMERO
+for ::= IDENTI:n1 ASIGN expr:n3 PUNTO_COMA 
+	condiciones:n5 PUNTO_COMA IDENTI:n7 ASIGN expr:n9			{: RESULT = new ForNormal(n1, n3, n5, n7); :}
+	| IDENTI:n1 IN NUMERO:n3 RANGO NUMERO:n5				{: RESULT = new ForRango(n1, n3, n5); :}
 	;
 	
-expr ::= expr:n1 SUMA term:n3									{: RESULT = new Suma(n1, n3); :}
-        | expr:n1 RESTA term:n3									{: RESULT = new Resta(n1, n3); :}
-        | term:n1										{: RESULT = n1; :}
+expr ::= expr:n1 SUMA:n2 term:n3						{: RESULT = new Suma(n1, n3, new Simbolo(n2left, n2right, "+")); :}
+        | expr:n1 RESTA:n2 term:n3						{: RESULT = new Resta(n1, n3,  new Simbolo(n2left, n2right, "-")); :}
+        | term:n1								{: RESULT = n1; :}
         ;
 
-term ::= term:n1 MULTI unario:n3								{: RESULT = new Multiplicacion(n1, n3); :}
-        | term:n1 DIVIS unario:n3								{: RESULT = new Division(n1, n3); :}
-        | unario:n1										{: RESULT = n1; :}
-        ;
-        
-unario ::= SUMA poten:n2									{: RESULT = n2; :}
-	| RESTA:n1 poten:n2									{: RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, n1left, n1right), n2); :}
-	| poten:n1										{: RESULT = n1; :}
-	;
-
-poten ::= poten:n1 POTEN factor:n3								{: RESULT = new Potencia(n1, n3); :}
-	| poten:n1 MODULO factor:n3								{: RESULT = new Modulo(n1, n3); :}
-	| factor:n1										{: RESULT = n1; :}
-	;
-
-factor ::= NUMERO:n1										{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
-	| DECIMAL:n1										{: RESULT = new Expresion(n1, Tipo.NUMBER, n1left, n1right); :}
-	| IDENTI:n1										{: RESULT = new Identificador(n1, n1left, n1right); :}
-	| CADENA:n1										{: RESULT = new Expresion(n1, Tipo.STRING, n1left, n1right); :}
-	| COMODIN:n1										{: RESULT = new Comodin(n1left, n1right); :}
-        | PARENAPER expr:n1 PARENCERRA								{: RESULT = n1; :}
+term ::= term:n1 MULTI:n2 unario:n3						{: RESULT = new Multiplicacion(n1, n3, new Simbolo(n2left, n2right, "*")); :}
+        | term:n1 DIVIS:n2 unario:n3						{: RESULT = new Division(n1, n3, new Simbolo(n2left, n2right, "/")); :}
+        | unario:n1								{: RESULT = n1; :}
         ;
         
-condicion ::= expr OPERACOMP expr
-	| OPERALOGINOT PARENAPER condicion PARENCERRA
-	| expr
+unario ::= SUMA poten:n2							{: RESULT = n2; :}
+	| RESTA:n1 poten:n2							{: RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, new Simbolo(n1left, n1right, "-")), n2,  n2.getSimbolo()); :}
+	| poten:n1								{: RESULT = n1; :}
+	;
+
+poten ::= poten:n1 POTEN:n2 factor:n3						{: RESULT = new Potencia(n1, n3,  new Simbolo(n2left, n2right, "^")); :}
+	| poten:n1 MODULO:n2 factor:n3						{: RESULT = new Modulo(n1, n3,  new Simbolo(n2left, n2right, "%")); :}
+	| factor:n1								{: RESULT = n1; :}
+	;
+
+factor ::= NUMERO:n1								{: RESULT = new Expresion(n1, Tipo.NUMBER,  new Simbolo(n1left, n1right, n1 + "")); :}
+	| DECIMAL:n1								{: RESULT = new Expresion(n1, Tipo.NUMBER, new Simbolo(n1left, n1right, n1 + "")); :}
+	| IDENTI:n1								{: RESULT = new Identificador(n1, new Simbolo(n1left, n1right, n1)); :}
+	| CADENA:n1								{: RESULT = new Expresion(n1, Tipo.STRING, new Simbolo(n1left, n1right, n1)); :}
+	| COMODIN:n1								{: RESULT = new Comodin(new Simbolo(n1left, n1right, "?")); :}
+        | PARENAPER expr:n1 PARENCERRA						{: RESULT = n1; :}
+        ;
+        
+condicion ::= expr:n1 MENOR_QUE:n2 expr:n3					{: RESULT = new MenorQue(new Simbolo(n2left, n2right, "<"), n1, n3); :}
+	| expr:n1 MAYOR_QUE:n2 expr:n3						{: RESULT = new MenorQue(new Simbolo(n2left, n2right, ">"), n1, n3); :}
+	| expr:n1 MAYOR_IGUAL:n2 expr:n3					{: RESULT = new MenorQue(new Simbolo(n2left, n2right, ">="), n1, n3); :}
+	| expr:n1 MENOR_IGUAL:n2 expr:n3					{: RESULT = new MenorQue(new Simbolo(n2left, n2right, "<="), n1, n3); :}
+	| expr:n1 DIFERENTE:n2 expr:n3						{: RESULT = new MenorQue(new Simbolo(n2left, n2right, "!!"), n1, n3); :}
+	| expr:n1 IGUAL:n2 expr:n3						{: RESULT = new MenorQue(new Simbolo(n2left, n2right, "=="), n1, n3); :}
+	| OPERALOGINOT:n1 PARENAPER condicion:n3 PARENCERRA			{: RESULT = new Negacion(new Simbolo(n1left, n1right, "~"), n3); :}
+	| expr:n1								{: RESULT = new CondicionExpresion(n1.getSimbolo(), n1); :}
 	;
 	
-condiciones_and ::= condicion OPERALOGIAND condicion
-	| OPERALOGINOT PARENAPER condiciones_and PARENCERRA
+condiciones_and ::= condicion:n1 OPERALOGIAND:n2 condicion:n3			{: RESULT = new OperadorAnd(new Simbolo(n2left, n2right, "&&"), n1, n3); :}
+	| OPERALOGINOT:n1 PARENAPER condiciones_and:n3 PARENCERRA		{: RESULT = new Negacion(new Simbolo(n1left, n1right, "~"), n3); :}
 	;
 	
-condiciones_or ::= condicion OPERALOGIOR condicion
-	| OPERALOGINOT PARENAPER condiciones_or PARENCERRA
+condiciones_or ::= condicion:n1 OPERALOGIOR:n2 condicion:n3			{: RESULT = new OperadorOr(new Simbolo(n2left, n2right, "||"), n1, n3); :}
+	| OPERALOGINOT:n1 PARENAPER condiciones_or:n3 PARENCERRA		{: RESULT = new Negacion(new Simbolo(n1left, n1right, "~"), n3); :}
 	;
 	
-condiciones ::= condiciones_and
-	| condiciones_or
-	| condicion
+condiciones ::= condiciones_and:n1						{: RESULT = n1; :}
+	| condiciones_or:n1							{: RESULT = n1; :}
+	| condicion:n1								{: RESULT = n1; :}
 	;

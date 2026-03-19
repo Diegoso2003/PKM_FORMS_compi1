@@ -2,13 +2,14 @@ package com.example.pkm_forms_proyecto1.backend.nodos
 
 import com.example.pkm_forms_proyecto1.auxiliares.MensajeError
 import com.example.pkm_forms_proyecto1.backend.InfoCalculo
+import com.example.pkm_forms_proyecto1.backend.Simbolo
 import com.example.pkm_forms_proyecto1.enums.Tipo
 import com.example.pkm_forms_proyecto1.enums.TipoError
 import com.example.pkm_forms_proyecto1.excepciones.ErrorSemantico
 
 abstract class NodoAritmetico(
-    val nodoIzq: NodoExpresion, val nodoDer: NodoExpresion, val nombreOpe: String
-) : NodoExpresion() {
+    simbolo: Simbolo, val nodoIzq: NodoExpresion, val nodoDer: NodoExpresion, val nombreOpe: String
+) : NodoExpresion(simbolo) {
     override fun evaluarNodo(infoCalculo: InfoCalculo): Expresion {
         val expr1 = nodoIzq.evaluarNodo(infoCalculo)
         val expr2 = nodoIzq.evaluarNodo(infoCalculo)
@@ -18,7 +19,7 @@ abstract class NodoAritmetico(
         try {
             return realizarOperacion(expr1, expr2)
         } catch (e: ErrorSemantico) {
-            infoCalculo.listaErrores.add(e.mensajeError)
+            infoCalculo.formulario.listaErrores.add(e.mensajeError)
             return Expresion("error", Tipo.ERROR_SEMANTICO)
         }
     }
@@ -30,9 +31,9 @@ abstract class NodoAritmetico(
         descripcion: String = "variable de tipo ${expr.tipo.name.lowercase()} no soporta operacion ${nombreOpe}"
     ): MensajeError {
         val mensaje = MensajeError(TipoError.SEMANTICO)
-        mensaje.linea = expr.linea
-        mensaje.columna = expr.columna
-        mensaje.lexema = expr.nombreID ?: expr.objeto.toString()
+        mensaje.linea = simbolo.linea
+        mensaje.columna = simbolo.columna
+        mensaje.lexema = simbolo.lexema
         mensaje.descripcion = descripcion
         return mensaje
     }

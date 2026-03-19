@@ -3,6 +3,8 @@ package com.example.pkm_forms_proyecto1.analizadores;
 import com.example.pkm_forms_proyecto1.backend.MensajeError;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
 import com.example.pkm_forms_proyecto1.enums.TipoError;
+import com.example.pkm_forms_proyecto1.enums.Orientacion;
+import com.example.pkm_forms_proyecto1.enums.TipoBorde;
 import java.util.List;
 import java_cup.runtime.*;
 
@@ -87,8 +89,6 @@ Hexadecimal = "#"[0-9A-F]{6}
 	\"font family\"						{ return symbol(sym.FONT); }
 	\"text size\"						{ return symbol(sym.TEXT_SIZE); }
 	\"border\"						{ return symbol(sym.BORDER); }
-	">"							{ return symbol(sym.MAYOR_Q); }
-	"<"							{ return symbol(sym.MENOR_Q); }
 	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
 }
 
@@ -112,9 +112,9 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "DO":
 										return symbol(sym.DO);
 									case "DOUBLE":
-										return symbol(sym.GROSOR, lexema);
+										return symbol(sym.GROSOR, TipoBorde.DOUBLE);
 									case "DOTTED":
-										return symbol(sym.GROSOR, lexema);
+										return symbol(sym.GROSOR, TipoBorde.DOTTED);
 									case "draw":
 										cambiarAInstruccion(); return symbol(sym.DRAW);
 									case "DROP_QUESTION":
@@ -130,7 +130,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "height":
 										return symbol(sym.HEIGHT);
 									case "HORIZONTAL":
-										return symbol(sym.HORIZONTAL);
+										return symbol(sym.TORIENTACION, Orientacion.HORIZONTAL);
 									case "IF":
 										return symbol(sym.IF);
 									case "in":
@@ -138,7 +138,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "label":
 										return symbol(sym.LABEL);
 									case "LINE":
-										return symbol(sym.GROSOR, lexema);
+										return symbol(sym.GROSOR, TipoBorde.LINE);
 									case "MONO":
 										return symbol(sym.FUENTE, lexema);
 									case "MULTIPLE_QUESTION":
@@ -180,13 +180,13 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "TEXT":
 										return symbol(sym.TEXT);
 									case "VERTICAL":
-										return symbol(sym.VERTICAL);
+										return symbol(sym.TORIENTACION, Orientacion.VERTICAL);
 									case "WHITE":
 										return symbol(sym.TCOLOR, lexema);
 									case "WHILE":
 										return symbol(sym.WHILE);
 									case "who_is_that_pokemon":
-										return symbol(sym.POKEMON);
+										return symbol(sym.POKEMON, lexema);
 									case "width":
 										return symbol(sym.WIDTH);
 									case "YELLOW":
@@ -195,12 +195,12 @@ Hexadecimal = "#"[0-9A-F]{6}
 										return symbol(sym.IDENTI, lexema);
 								}
 								}
-	"<="							{ return symbol(sym.OPERACOMP, yytext()); }
-	">="							{ return symbol(sym.OPERACOMP, yytext()); }
-	"!!"							{ return symbol(sym.OPERACOMP, yytext()); }
-	">"							{ return symbol(sym.OPERACOMP, yytext()); }
-	"<"							{ return symbol(sym.OPERACOMP, yytext()); }
-	"=="							{ return symbol(sym.OPERACOMP, yytext()); }
+	"<="							{ return symbol(sym.MENOR_IGUAL); }
+	">="							{ return symbol(sym.MAYOR_IGUAL); }
+	"!!"							{ return symbol(sym.DIFERENTE); }
+	">"							{ return symbol(sym.MAYOR_QUE); }
+	"<"							{ return symbol(sym.MENOR_QUE); }
+	"=="							{ return symbol(sym.IGUAL); }
 	"||"							{ return symbol(sym.OPERALOGIOR); }
 	"&&"							{ return symbol(sym.OPERALOGIAND); }
 	"~"							{ return symbol(sym.OPERALOGINOT); }

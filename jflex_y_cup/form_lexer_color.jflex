@@ -141,6 +141,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 									case "WHILE":
 									case "who_is_that_pokemon":
 									case "width":
+									case "with":
 									case "YELLOW":
 										agregarToken(ColorToken.MORADO, lexema.length());
 										break;
