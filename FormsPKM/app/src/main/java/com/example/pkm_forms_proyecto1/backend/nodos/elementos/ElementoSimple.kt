@@ -9,6 +9,6 @@ import java.util.LinkedList
 
 class ElementoSimple(simbolo: Simbolo, val elemento: Elemento, val linkedList: LinkedList<Atributo>): NodoElemento(simbolo) {
     override fun realizarAccion(infoCalculo: InfoCalculo) {
-        TODO("Not yet implemented")
+
     }
 }

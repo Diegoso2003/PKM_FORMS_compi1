@@ -29,7 +29,7 @@ class Identificador(val nombre: String, simbolo: Simbolo) : NodoExpresion(simbol
             infoCalculo.formulario.listaErrores.add(
                 armarMensaje(
                     this.simbolo,
-                    "no se permite realizar operaciones aritméticas con variable special"
+                    "variable special solo puede ser usada en función draw."
                 )
             )
             return Expresion("Error", Tipo.ERROR_SEMANTICO)

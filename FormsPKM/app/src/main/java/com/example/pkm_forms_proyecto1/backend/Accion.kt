@@ -1,5 +1,8 @@
 package com.example.pkm_forms_proyecto1.backend
 
-abstract class Accion(simbolo: Simbolo) {
+import com.example.pkm_forms_proyecto1.auxiliares.armarMensaje
+
+abstract class Accion(val simbolo: Simbolo) {
     abstract fun realizarAccion(infoCalculo: InfoCalculo)
+
 }

@@ -7,21 +7,16 @@ import com.example.pkm_forms_proyecto1.backend.Simbolo
 import com.example.pkm_forms_proyecto1.backend.condiciones.Condicion
 import java.util.LinkedList
 
-class CicloWhile(simbolo: Simbolo, val condicion: Condicion, val lista: LinkedList<Accion>) :
+class CicloDoWhile(simbolo: Simbolo, val condicion: Condicion, val lista: LinkedList<Accion>) :
     Accion(simbolo) {
     override fun realizarAccion(infoCalculo: InfoCalculo) {
         val inicio = infoCalculo.formulario.listaErrores.size
-        var contador2 = inicio
         var contador = 0
-        while (contador < LIMITE_CICLOS && contador2 == inicio && condicion.evaluarCondicion(
-                infoCalculo
-            )
-        ) {
+        do {
             contador++
             for (accion in lista) {
                 accion.realizarAccion(infoCalculo)
             }
-            contador2 = infoCalculo.formulario.listaErrores.size
-        }
+        } while (contador < LIMITE_CICLOS && condicion.evaluarCondicion(infoCalculo) && inicio == infoCalculo.formulario.listaErrores.size)
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
-import com.example.pkm_forms_proyecto1.backend.Token;
+import com.example.pkm_forms_proyecto1.auxiliares.Token;
 import com.example.pkm_forms_proyecto1.enums.ColorToken;
 import java.util.LinkedList;
 import java.util.List;

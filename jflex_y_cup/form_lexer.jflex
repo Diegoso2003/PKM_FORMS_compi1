@@ -1,6 +1,6 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
-import com.example.pkm_forms_proyecto1.backend.MensajeError;
+import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
 import com.example.pkm_forms_proyecto1.enums.TipoError;
 import com.example.pkm_forms_proyecto1.enums.Orientacion;
@@ -27,6 +27,10 @@ import java_cup.runtime.*;
 	private int columna;
 	private List<MensajeError> errores;
 	
+	public void setErrores(List<MensajeError> errores){
+		this.errores = errores;
+	}
+	
 	private Symbol symbol(int type){
 		return new Symbol(type, yyline+1, yycolumn+1);
 	}
@@ -48,7 +52,7 @@ import java_cup.runtime.*;
     	
     	private void reportarErrorLexico(){
     		int estado = yystate();
-    		MensajeError error = new MensajeError(TipoEnum.LEXICO);
+    		MensajeError error = new MensajeError(TipoError.LEXICO);
             	error.setColumna(yycolumn+1);
             	error.setLinea(yyline+1);
     		if (estado == STRING){
