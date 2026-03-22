@@ -84,11 +84,11 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 %%
 
 <ESTILO> {
-	\"color\"						{ agregarToken(ColorToken.MORADO); }
-	\"background color\"					{ agregarToken(ColorToken.MORADO); }
-	\"font family\"						{ agregarToken(ColorToken.MORADO); }
-	\"text size\"						{ agregarToken(ColorToken.MORADO); }
-	\"border\"						{ agregarToken(ColorToken.MORADO); }
+	"\"color\""						{ agregarToken(ColorToken.MORADO); }
+	"\"background color\""					{ agregarToken(ColorToken.MORADO); }
+	"\"font family\""					{ agregarToken(ColorToken.MORADO); }
+	"\"text size\""						{ agregarToken(ColorToken.MORADO); }
+	"\"border\""						{ agregarToken(ColorToken.MORADO); }
 	"]"							{ yybegin(YYINITIAL); agregarToken(ColorToken.AZUL); }
 }
 
@@ -160,7 +160,6 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	"~"							{ /* no hace nada */ }
 	";"							{ /* no hace nada */ }
 	"="							{ /* no hace nada */ }
-	\"							{ agregarToken(ColorToken.NARANJA); iniciarCadena(); }
 	{Numero}						{ agregarToken(ColorToken.CELESTE); }
 	{Decimal}						{ agregarToken(ColorToken.CELESTE); }
 	{Hexadecimal}						{ /* no hace nada */ }
@@ -181,6 +180,7 @@ Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 	","							{ /* no hace nada */ }
 	"["							{ agregarToken(ColorToken.AZUL); }
 	"]"							{ agregarToken(ColorToken.AZUL); }
+	\"							{ agregarToken(ColorToken.NARANJA); iniciarCadena(); }
 	"?"							{ /* no hace nada */ }
 	"$".*							{ /* ignorar comentarios */ }
 	{WhiteSpace}						{ /* ignorar espacios en blanco */ }

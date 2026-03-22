@@ -3,25 +3,49 @@ package com.example.pkm_forms_proyecto1.backend
 import com.example.pkm_forms_proyecto1.analizadores.FormLexer
 import com.example.pkm_forms_proyecto1.analizadores.FormParser
 import com.example.pkm_forms_proyecto1.auxiliares.MensajeError
+import com.example.pkm_forms_proyecto1.enums.TipoError
 import java.io.StringReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.LinkedList
 
 class Formulario {
-    val tabla: TablaSimbolos = TablaSimbolos()
+    lateinit var tabla: TablaSimbolos
     val listaErrores: LinkedList<MensajeError> = LinkedList()
     val datos = StringBuilder()
-    val contador = Contador()
+    var textoForm = ""
+    lateinit var contador:Contador
 
     fun analizar(texto: String):Boolean {
+        textoForm = texto
+        tabla = TablaSimbolos()
+        contador = Contador()
+        listaErrores.clear()
+        datos.clear()
         val lexer = FormLexer(StringReader(texto))
         lexer.setErrores(listaErrores)
         val parser = FormParser(lexer, this)
         try {
-            recorrerArbol(parser.parse().value as LinkedList<Accion>)
+            val result = parser.parse()
+            val lista = result?.value
+            if (lista is LinkedList<*>) {
+                val acciones = lista.filterIsInstance<Accion>()
+                if (acciones.size == lista.size) {
+                    recorrerArbol(LinkedList(acciones))
+                }
+                if (contador.preguntas == 0) {
+                    val mensajeError = MensajeError(TipoError.SEMANTICO)
+                    mensajeError.descripcion =
+                        "el formulario debe tener al menos una pregunta para crearse"
+                    listaErrores.add(mensajeError)
+                }
+            }
             return listaErrores.isEmpty()
         } catch (e: Exception) {
+            val mensajeError = MensajeError(TipoError.SEMANTICO)
+            mensajeError.descripcion = e.message ?: e.toString()
+            e.printStackTrace()
+            listaErrores.add(mensajeError)
             return false;
         }
     }

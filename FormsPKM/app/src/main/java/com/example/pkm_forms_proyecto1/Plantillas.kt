@@ -6,7 +6,7 @@ SECTION [
     height: 30,
     pointX: 5,
     pointY: 5,
-    elements {
+    elements: {
         
     }
 ]

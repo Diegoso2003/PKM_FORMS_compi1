@@ -1,6 +1,7 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
 import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
+import com.example.pkm_forms_proyecto1.enums.TLetra;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
 import com.example.pkm_forms_proyecto1.enums.TipoError;
 import com.example.pkm_forms_proyecto1.enums.Orientacion;
@@ -42,11 +43,14 @@ import java_cup.runtime.*;
 	private void iniciarCadena(){
 		yybegin(STRING);
     		texto.setLength(0);
+    		texto.append('"');
     		linea = yyline+1;
     		columna = yycolumn+1;
     	}
     	
     	private Symbol reportarCadena(){
+    		texto.append('"');
+    		yybegin(YYINITIAL);
     		return new Symbol(sym.CADENA, linea, columna, texto.toString());
     	}
     	
@@ -80,7 +84,7 @@ import java_cup.runtime.*;
 LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [\t\f ]
 Numero = [0-9]+
-Decimal = {Numero}.{Numero}
+Decimal = {Numero}\.{Numero}
 Letra = [a-zA-Z]
 Identificador = (_|{Letra})(_|{Letra}|{Numero})*
 Hexadecimal = "#"[0-9A-F]{6}
@@ -88,11 +92,11 @@ Hexadecimal = "#"[0-9A-F]{6}
 %%
 
 <ESTILO> {
-	\"color\"						{ return symbol(sym.COLOR); }
-	\"background color\"					{ return symbol(sym.BACKGROUND); }
-	\"font family\"						{ return symbol(sym.FONT); }
-	\"text size\"						{ return symbol(sym.TEXT_SIZE); }
-	\"border\"						{ return symbol(sym.BORDER); }
+	"\"color\""						{ return symbol(sym.COLOR); }
+	"\"background color\""					{ return symbol(sym.BACKGROUND); }
+	"\"font family\""					{ return symbol(sym.FONT); }
+	"\"text size\""						{ return symbol(sym.TEXT_SIZE); }
+	"\"border\""						{ return symbol(sym.BORDER); }
 	"]"							{ yybegin(YYINITIAL); return symbol(sym.CORCHECERRA); }
 }
 
@@ -112,7 +116,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "correct":
 										return symbol(sym.CORRECT);
 									case "CURSIVE":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.CURSIVE);
 									case "DO":
 										return symbol(sym.DO);
 									case "DOUBLE":
@@ -144,7 +148,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "LINE":
 										return symbol(sym.GROSOR, TipoBorde.LINE);
 									case "MONO":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.MONO);
 									case "MULTIPLE_QUESTION":
 										return symbol(sym.MULTIPLE_QUESTION);
 									case "number":
@@ -166,7 +170,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 									case "RED":
 										return symbol(sym.TCOLOR, lexema);
 									case "SANS_SERIF":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.SANS_SERIF);
 									case "SECTION":
 										return symbol(sym.SECTION);
 									case "SELECT_QUESTION":
@@ -210,7 +214,6 @@ Hexadecimal = "#"[0-9A-F]{6}
 	"~"							{ return symbol(sym.OPERALOGINOT); }
 	";"							{ return symbol(sym.PUNTO_COMA); }
 	"="							{ return symbol(sym.ASIGN); }
-	\"							{ iniciarCadena(); }
 	{Numero}						{ return symbol(sym.NUMERO, Integer.parseInt(yytext())); }
 	{Decimal}						{ return symbol(sym.DECIMAL, Double.parseDouble(yytext())); }
 	{Hexadecimal}						{ return symbol(sym.HEXADECIMAL, yytext()); }
@@ -233,6 +236,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 	"]"							{ return symbol(sym.CORCHECERRA); }
 	"?"							{ return symbol(sym.COMODIN); }
 	"$".*							{ /* ignorar comentarios */ }
+	\"							{ iniciarCadena(); }
 	{WhiteSpace}						{ /* ignorar espacios en blanco */ }
 	.							{ reportarErrorLexico(); }
 }

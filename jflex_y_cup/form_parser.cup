@@ -211,8 +211,10 @@ start with formulario;
 
 formulario ::= formulario:n1 instruccion:n2					{: n1.add(n2); RESULT = n1; :}
 	| formulario:n1 declaracion:n2						{: n1.add(n2); RESULT = n1; :}
+	| formulario:n1 error							{: RESULT = n1; :}
 	| instruccion:n1							{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
 	| declaracion:n1							{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
+	| error									{: RESULT = new LinkedList<Accion>(); :}
 	;
 	
 instruccion ::= asignacion:n1							{: RESULT = n1; :}
@@ -247,6 +249,8 @@ seccion ::= SECTION:n1 CORCHEAPER atributos_seccion:n3 CORCHECERRA		{: RESULT = 
 	
 atributos_seccion ::= atributo_seccion:n1					{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
 	| atributos_seccion:n1 COMA atributo_seccion:n3				{: n1.add(n3); RESULT = n1; :}
+	| atributos_seccion:n1 error						{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<Atributo>(); :}
 	;
 	
 atributo_seccion ::= atributo_general:n1					{: RESULT = n1; :}
@@ -257,6 +261,8 @@ atributo_seccion ::= atributo_general:n1					{: RESULT = n1; :}
 	
 elementos ::= elemento:n1							{: RESULT = new LinkedList<NodoElemento>(); RESULT.add(n1); :}
 	| elementos:n1 COMA elemento:n3						{: n1.add(n3); RESULT = n1; :}
+	| elementos:n1 error							{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<NodoElemento>(); :}
 	;
 	
 elemento ::= seccion:n1								{: RESULT = n1; :}
@@ -276,6 +282,8 @@ estilo ::= STYLES:n1 CORCHEAPER atributos_estilo:n3 CORCHECERRA			{: RESULT = ne
 	
 atributos_estilo ::= atributo_estilo:n1						{: RESULT = new LinkedList<AtributoEstilo>(); RESULT.add(n1); :}
 	| atributos_estilo:n1 COMA atributo_estilo:n3				{: n1.add(n3); RESULT = n1; :}
+	| atributos_estilo:n1 error						{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<AtributoEstilo>(); :}
 	;
 	
 atributo_estilo ::= COLOR:n1 DOS_PUNTOS color:n3				{: RESULT = new AColor(new Simbolo(n1left, n1right, "\"color\""), n3); :}
@@ -286,10 +294,11 @@ atributo_estilo ::= COLOR:n1 DOS_PUNTOS color:n3				{: RESULT = new AColor(new S
 	PARENAPER expr:n4 COMA GROSOR:n6 COMA color:n7 PARENCERRA		{: RESULT = new Borde(new Simbolo(n1left, n1right, "\"border\""), n4, n6, n7); :}
 	;
 	
-color ::= TCOLOR:n1								{: new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
-	| HEXADECIMAL:n1							{: new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
-	| PARENAPER expr:n3 COMA expr:n5 COMA expr:n7 PARENCERRA		{: new ColorRGB(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
-	| MENOR_QUE expr:n3 COMA expr:n5 COMA expr:n7 MAYOR_QUE			{: new ColorHSL(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
+color ::= TCOLOR:n1								{: RESULT = new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
+	| HEXADECIMAL:n1							{: RESULT = new ColorCadena(new Simbolo(n1left, n1right, n1), n1); :}
+	| PARENAPER expr:n3 COMA expr:n5 COMA expr:n7 PARENCERRA		{: RESULT = new ColorRGB(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
+	| MENOR_QUE expr:n3 COMA expr:n5 COMA expr:n7 MAYOR_QUE			{: RESULT = new ColorHSL(new Simbolo(n3left, n3right, ""), new NodoExpresion[]{n3, n5, n7}); :}
+	| error:n1								{: RESULT = new ColorCadena(new Simbolo(n1left, n1right, ""), "BLACK"); :}
 	;
 	
 atributo_elemento ::= POINTX:n1 DOS_PUNTOS expr:n3				{: RESULT = new PointX(new Simbolo(n1left, n1right, "pointX"), n3); :}
@@ -301,6 +310,8 @@ tabla ::= TABLE:n1 CORCHEAPER atributos_tabla:n3 CORCHECERRA			{: RESULT = new E
 	
 atributos_tabla ::= atributo_tabla:n1						{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
 	| atributos_tabla:n1 COMA atributo_tabla:n3				{: n1.add(n3); RESULT = n1; :}
+	| atributos_tabla:n1 error						{: RESULT = n1; :}
+	| error 								{: RESULT = new LinkedList<Atributo>(); :}
 	;
 	
 atributo_tabla ::= atributo_general:n1						{: RESULT = n1; :}
@@ -310,6 +321,8 @@ atributo_tabla ::= atributo_general:n1						{: RESULT = n1; :}
 	
 filas_tabla ::= fila_tabla:n1							{: RESULT = new LinkedList<LinkedList<NodoElemento>>(); RESULT.add(n1); :}
 	| filas_tabla:n1 COMA fila_tabla:n3					{: n1.add(n3); RESULT = n1; :}
+	| filas_tabla:n1 error							{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<LinkedList<NodoElemento>>(); :}
 	;
 	
 fila_tabla ::= CORCHEAPER columnas_tabla:n2 CORCHECERRA				{: RESULT = n2; :}
@@ -317,6 +330,8 @@ fila_tabla ::= CORCHEAPER columnas_tabla:n2 CORCHECERRA				{: RESULT = n2; :}
 	
 columnas_tabla ::= columna_tabla:n1						{: RESULT = new LinkedList<NodoElemento>(); RESULT.add(n1); :}
 	| columnas_tabla:n1 COMA columna_tabla:n2				{: n1.add(n2); RESULT = n1; :}
+	| columnas_tabla:n1 error						{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<NodoElemento>(); :}
 	;
 	
 columna_tabla ::= LLAVE_APER elemento:n2 LLAVE_CERRA				{: RESULT = n2; :}
@@ -327,6 +342,8 @@ texto ::= TEXT:n1 CORCHEAPER atributos_texto:n3 CORCHECERRA			{: RESULT = new El
 	
 atributos_texto ::= atributo_texto:n1						{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
 	| atributos_texto:n1 COMA atributo_texto:n3				{: n1.add(n3); RESULT = n1; :}
+	| atributos_texto:n1 error						{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<Atributo>(); :}
 	;
 	
 atributo_texto ::= atributo_general:n1						{: RESULT = n1; :}
@@ -344,6 +361,8 @@ tipo_pregunta ::= DROP_QUESTION							{: RESULT = new PreguntaDesplegable(); :}
 	
 atributos_pregunta ::= atributo_pregunta:n1					{: RESULT = new LinkedList<Atributo>(); RESULT.add(n1); :}
 	| atributos_pregunta:n1 COMA atributo_pregunta:n3			{: n1.add(n3); RESULT = n1; :}
+	| atributos_pregunta:n1 error						{: RESULT = n1; :}
+	| error									{: RESULT = new LinkedList<Atributo>(); :}
 	;
 
 atributo_pregunta ::= atributo_general:n1					{: RESULT = n1; :}
@@ -356,8 +375,8 @@ correct ::= expr:n1								{: RESULT = new LinkedList<NodoExpresion>(); RESULT.a
 	| LLAVE_APER parametros:n2 LLAVE_CERRA					{: RESULT = n2; :}
 	;
 	
-opciones ::= LLAVE_APER parametros:n2 LLAVE_CERRA				{: RESULT = new ListaOpciones(n2); :}
-	| POKEMON:n1 PARENAPER NUMBER COMA expr:n5 COMA expr:n7 PARENCERRA	{: RESULT = new PokeApi(new Simbolo(n1left, n1left, n1), n5, n7); :}
+opciones ::= LLAVE_APER parametros:n2 LLAVE_CERRA				{: RESULT = new ListaOpciones(new Simbolo(n2left, n2right, ""), n2); :}
+	| POKEMON:n1 PARENAPER NUMBER COMA expr:n5 COMA expr:n7 PARENCERRA	{: RESULT = new PokeApi(new Simbolo(n1left, n1right, n1), n5, n7); :}
 	;
 
 bloque ::= LLAVE_APER instrucciones:n3 LLAVE_CERRA				{: RESULT = n3; :}
@@ -379,6 +398,8 @@ ciclo ::= WHILE:n1 PARENAPER condiciones:n3 PARENCERRA bloque:n5		{: RESULT = ne
 	
 instrucciones ::= instruccion:n1						{: RESULT = new LinkedList<Accion>(); RESULT.add(n1); :}
 	| instrucciones:n1 instruccion:n2					{: n1.add(n2); RESULT = n1; :}
+	| instrucciones:n1 error						{: RESULT = n1; :}
+	| error 								{: RESULT = new LinkedList<Accion>(); :}
 	;
 	
 for ::= IDENTI:n1 ASIGN expr:n3 PUNTO_COMA 
@@ -407,11 +428,12 @@ poten ::= poten:n1 POTEN:n2 factor:n3						{: RESULT = new Potencia(n1, n3,  new
 	| factor:n1								{: RESULT = n1; :}
 	;
 
-factor ::= NUMERO:n1								{: RESULT = new Expresion(n1, Tipo.NUMBER,  new Simbolo(n1left, n1right, n1 + "")); :}
+factor ::= NUMERO:n1								{: RESULT = new Expresion(n1 + 0.0, Tipo.NUMBER,  new Simbolo(n1left, n1right, n1 + "")); :}
 	| DECIMAL:n1								{: RESULT = new Expresion(n1, Tipo.NUMBER, new Simbolo(n1left, n1right, n1 + "")); :}
 	| IDENTI:n1								{: RESULT = new Identificador(n1, new Simbolo(n1left, n1right, n1)); :}
 	| CADENA:n1								{: RESULT = new Expresion(n1, Tipo.STRING, new Simbolo(n1left, n1right, n1)); :}
 	| COMODIN:n1								{: RESULT = new Comodin(new Simbolo(n1left, n1right, "?")); :}
+	| error									{: RESULT = new Expresion("error", Tipo.ERROR_SEMANTICO); :}
         | PARENAPER expr:n1 PARENCERRA						{: RESULT = n1; :}
         ;
         
@@ -428,6 +450,7 @@ condicion ::= expr:n1 MENOR_QUE:n2 expr:n3					{: RESULT = new MenorQue(new Simb
 condiciones_and ::= condicion:n1 OPERALOGIAND:n2 condicion:n3			{: RESULT = new OperadorAnd(new Simbolo(n2left, n2right, "&&"), n1, n3); :}
 	| condiciones_and:n1 OPERALOGIAND condicion:n3				{: ((OperadorLogico)n1).agregarCondicion(n3); RESULT = n1; :}
 	| condiciones_and:n1 OPERALOGIAND negacion_and:n3			{: ((OperadorLogico)n1).agregarCondicion(n3); RESULT = n1; :}
+	| condiciones_and:n1 error						{: RESULT = n1; :}
 	| negacion_and:n1							{: RESULT = n1; :}
 	;
 	
@@ -437,6 +460,7 @@ negacion_and ::= OPERALOGINOT:n1 PARENAPER condiciones_and:n3 PARENCERRA	{: RESU
 condiciones_or ::= condicion:n1 OPERALOGIOR:n2 condicion:n3			{: RESULT = new OperadorOr(new Simbolo(n2left, n2right, "||"), n1, n3); :}
 	| condiciones_or:n1 OPERALOGIOR condicion:n3				{: ((OperadorLogico)n1).agregarCondicion(n3); RESULT = n1; :}
 	| condiciones_or:n1 OPERALOGIOR negacion_or:n3				{: ((OperadorLogico)n1).agregarCondicion(n3); RESULT = n1; :}
+	| condiciones_or:n1 error						{: RESULT = n1; :}
 	| negacion_or:n1							{: RESULT = n1; :}
 	;
 	

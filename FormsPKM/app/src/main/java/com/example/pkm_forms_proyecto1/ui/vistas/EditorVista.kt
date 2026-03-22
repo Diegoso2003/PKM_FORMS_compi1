@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,11 +51,15 @@ import com.example.pkm_forms_proyecto1.NOMBRE_APP
 import com.example.pkm_forms_proyecto1.R
 import com.example.pkm_forms_proyecto1.auxiliares.Coloreador
 import com.example.pkm_forms_proyecto1.auxiliares.Token
+import com.example.pkm_forms_proyecto1.backend.Formulario
+import com.example.pkm_forms_proyecto1.ui.navegacion.Ruta
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditorVista(navController: NavController){
-    var textState by remember { mutableStateOf(TextFieldValue("")) }
+fun EditorVista(navController: NavController, formulario: Formulario){
+    var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+    mutableStateOf(TextFieldValue(""))
+}
     var tokens by remember { mutableStateOf(listOf<Token>()) }
     val (linea, columna) = obtenerLineaColumna(textState.text, textState.selection.start)
     var menuInsertar by remember { mutableStateOf(false) }
@@ -82,7 +87,7 @@ fun EditorVista(navController: NavController){
                         onClick = { navController.popBackStack() }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver"
                         )
                     }
@@ -158,7 +163,15 @@ fun EditorVista(navController: NavController){
                 }
 
                 TextButton(
-                    onClick = {  }
+                    onClick = {
+                        if(textState.text.isNotBlank()) {
+                            if (formulario.analizar(textState.text)) {
+                                navController.navigate(Ruta.Autor.ruta)
+                            } else {
+                                navController.navigate(Ruta.Errores.ruta)
+                            }
+                        }
+                    }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally

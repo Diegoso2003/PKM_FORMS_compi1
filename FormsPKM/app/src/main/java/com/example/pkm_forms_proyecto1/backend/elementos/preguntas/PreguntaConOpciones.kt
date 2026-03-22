@@ -6,16 +6,13 @@ import com.example.pkm_forms_proyecto1.excepciones.ErrorSemantico
 import java.util.LinkedList
 
 abstract class PreguntaConOpciones(nombre: String): Pregunta(nombre) {
-    var options: LinkedList<String>? = null
-    var correcto: LinkedList<Int>? = null
+    var options: LinkedList<String> = LinkedList()
+    var correcto: LinkedList<Int> = LinkedList()
 
-    protected fun validarOpciones(){
-        for(e in correcto!!){
-            if(e < 0 || e >= options!!.size){
-                val mensaje = MensajeError(TipoError.SEMANTICO)
-                mensaje.descripcion = "$e está fuera de rango"
-                throw ErrorSemantico(mensaje)
-            }
+    fun validarOpciones(): Boolean{
+        for(indice in correcto){
+            if(indice < 0 || indice >= options.size) return false
         }
+        return true
     }
 }

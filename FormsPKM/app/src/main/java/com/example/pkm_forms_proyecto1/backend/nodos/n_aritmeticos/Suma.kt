@@ -20,12 +20,12 @@ class Suma(
         }
         val valor1 = if (expr1.tipo == Tipo.NUMBER) String.format(
             Locale.US,
-            "%.2f",
+            "%.1f",
             expr1.objeto
         ) else expr1.objeto.toString()
         val valor2 = if (expr1.tipo == Tipo.NUMBER) String.format(
             Locale.US,
-            "%.2f",
+            "%.1f",
             expr2.objeto
         ) else expr2.objeto.toString()
         return Expresion((valor1 + valor2), Tipo.STRING, expr1.simbolo)

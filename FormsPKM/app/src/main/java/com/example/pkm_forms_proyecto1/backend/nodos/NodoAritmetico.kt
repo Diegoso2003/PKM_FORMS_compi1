@@ -12,7 +12,7 @@ abstract class NodoAritmetico(
 ) : NodoExpresion(simbolo) {
     override fun evaluarNodo(infoCalculo: InfoCalculo): Expresion {
         val expr1 = nodoIzq.evaluarNodo(infoCalculo)
-        val expr2 = nodoIzq.evaluarNodo(infoCalculo)
+        val expr2 = nodoDer.evaluarNodo(infoCalculo)
         if (expr1.tipo == Tipo.ERROR_SEMANTICO || expr2.tipo == Tipo.ERROR_SEMANTICO) {
             return Expresion("error", Tipo.ERROR_SEMANTICO)
         }

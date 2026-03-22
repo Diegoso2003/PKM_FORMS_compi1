@@ -24,11 +24,15 @@ class Comodin(simbolo: Simbolo) : NodoExpresion(simbolo) {
             infoCalculo.formulario.listaErrores.add(
                 armarMensaje(
                     simbolo,
-                    "El número de argumentos pasados no coincide con los '?' definidos en la pregunta special"
+                    "El número de argumentos pasados no coincide con los '?' definidos en la pregunta special, faltan parametros."
                 )
             )
             return Expresion("Error", Tipo.ERROR_SEMANTICO)
         }
-        return infoCalculo.listaComodin.removeFirst()
+        val exprAux = infoCalculo.listaComodin.removeFirst()
+        infoCalculo.cambiarEstados()
+        val exprFinal = exprAux.evaluarNodo(infoCalculo)
+        infoCalculo.cambiarEstados()
+        return exprFinal
     }
 }

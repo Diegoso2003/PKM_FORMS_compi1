@@ -5,6 +5,7 @@
 package com.example.pkm_forms_proyecto1.analizadores;
 
 import com.example.pkm_forms_proyecto1.auxiliares.MensajeError;
+import com.example.pkm_forms_proyecto1.enums.TLetra;
 import com.example.pkm_forms_proyecto1.enums.Tipo;
 import com.example.pkm_forms_proyecto1.enums.TipoError;
 import com.example.pkm_forms_proyecto1.enums.Orientacion;
@@ -73,15 +74,15 @@ public class FormLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\11\0\1\1\1\2\1\3\1\4\1\5\22\0\1\1"+
-    "\1\6\1\7\1\10\1\11\1\12\1\13\1\0\1\14"+
-    "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\12\24"+
-    "\1\25\1\26\1\27\1\30\1\31\1\32\1\0\6\33"+
-    "\24\34\1\35\1\36\1\37\1\40\1\34\1\0\1\41"+
-    "\1\42\1\43\1\44\1\45\1\46\1\47\1\34\1\50"+
-    "\1\34\1\51\1\52\1\53\1\54\1\55\2\34\1\56"+
-    "\1\57\1\60\1\61\2\34\1\62\1\63\1\64\1\65"+
-    "\1\66\1\67\1\70\6\0\1\3\u01a2\0\2\3\326\0"+
+    "\11\0\1\1\1\2\1\3\1\4\1\5\22\0\1\6"+
+    "\1\7\1\10\1\11\1\12\1\13\1\14\1\0\1\15"+
+    "\1\16\1\17\1\20\1\21\1\22\1\23\1\24\12\25"+
+    "\1\26\1\27\1\30\1\31\1\32\1\33\1\0\6\34"+
+    "\24\35\1\36\1\37\1\40\1\41\1\35\1\0\1\42"+
+    "\1\43\1\44\1\45\1\46\1\47\1\50\1\35\1\51"+
+    "\1\35\1\52\1\53\1\54\1\55\1\56\2\35\1\57"+
+    "\1\60\1\61\1\62\2\35\1\63\1\64\1\65\1\66"+
+    "\1\67\1\70\1\71\6\0\1\3\u01a2\0\2\3\326\0"+
     "\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
@@ -116,11 +117,11 @@ public class FormLexer implements java_cup.runtime.Scanner {
     "\1\34\1\35\1\34\1\36\2\4\1\3\1\37\1\40"+
     "\1\0\1\41\1\42\1\43\1\0\1\44\1\45\1\46"+
     "\1\47\1\50\1\51\5\0\1\52\27\0\1\53\2\0"+
-    "\1\54\3\0\1\55\7\0\1\56\3\0\1\57\4\0"+
+    "\1\54\3\0\1\55\12\0\1\56\3\0\1\57\4\0"+
     "\1\60";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[111];
+    int [] result = new int[114];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -145,23 +146,24 @@ public class FormLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\71\0\162\0\253\0\344\0\u011d\0\u011d\0\u0156"+
-    "\0\u018f\0\u011d\0\u01c8\0\u0201\0\u011d\0\u023a\0\u011d\0\u011d"+
-    "\0\u011d\0\u011d\0\u011d\0\u011d\0\u0273\0\u02ac\0\u02e5\0\u011d"+
-    "\0\u011d\0\u031e\0\u0357\0\u0390\0\u011d\0\u03c9\0\u011d\0\u011d"+
-    "\0\u011d\0\u011d\0\u0402\0\u011d\0\u011d\0\u011d\0\u011d\0\u043b"+
-    "\0\u011d\0\u011d\0\u0474\0\u04ad\0\u011d\0\u011d\0\u04e6\0\u011d"+
-    "\0\u011d\0\u011d\0\u051f\0\u011d\0\u011d\0\u011d\0\u011d\0\u011d"+
-    "\0\u011d\0\u0558\0\u0591\0\u05ca\0\u0603\0\u063c\0\u051f\0\u0675"+
-    "\0\u06ae\0\u06e7\0\u0720\0\u0759\0\u0792\0\u07cb\0\u0804\0\u083d"+
-    "\0\u0876\0\u08af\0\u08e8\0\u0921\0\u095a\0\u0993\0\u09cc\0\u0a05"+
-    "\0\u0a3e\0\u0a77\0\u0ab0\0\u0ae9\0\u0b22\0\u0b5b\0\u011d\0\u0b94"+
-    "\0\u0bcd\0\u011d\0\u0c06\0\u0c3f\0\u0c78\0\u011d\0\u0cb1\0\u0cea"+
-    "\0\u0d23\0\u0d5c\0\u0d95\0\u0dce\0\u0e07\0\u011d\0\u0e40\0\u0e79"+
-    "\0\u0eb2\0\u011d\0\u0eeb\0\u0f24\0\u0f5d\0\u0f96\0\u011d";
+    "\0\0\0\72\0\164\0\256\0\350\0\u0122\0\u0122\0\u015c"+
+    "\0\u0196\0\u0122\0\u01d0\0\u020a\0\u0122\0\u0244\0\u0122\0\u0122"+
+    "\0\u0122\0\u0122\0\u0122\0\u0122\0\u027e\0\u02b8\0\u02f2\0\u0122"+
+    "\0\u0122\0\u032c\0\u0366\0\u03a0\0\u0122\0\u03da\0\u0122\0\u0122"+
+    "\0\u0122\0\u0122\0\u0414\0\u0122\0\u0122\0\u0122\0\u0122\0\u044e"+
+    "\0\u0122\0\u0122\0\u0488\0\u04c2\0\u0122\0\u0122\0\u04fc\0\u0122"+
+    "\0\u0122\0\u0122\0\u0536\0\u0122\0\u0122\0\u0122\0\u0122\0\u0122"+
+    "\0\u0122\0\u0570\0\u05aa\0\u05e4\0\u061e\0\u0658\0\u0536\0\u0692"+
+    "\0\u06cc\0\u0706\0\u0740\0\u077a\0\u07b4\0\u07ee\0\u0828\0\u0862"+
+    "\0\u089c\0\u08d6\0\u0910\0\u094a\0\u0984\0\u09be\0\u09f8\0\u0a32"+
+    "\0\u0a6c\0\u0aa6\0\u0ae0\0\u0b1a\0\u0b54\0\u0b8e\0\u0122\0\u0bc8"+
+    "\0\u0c02\0\u0122\0\u0c3c\0\u0c76\0\u0cb0\0\u0122\0\u0cea\0\u0d24"+
+    "\0\u0d5e\0\u0d98\0\u0dd2\0\u0e0c\0\u0e46\0\u0e80\0\u0eba\0\u0ef4"+
+    "\0\u0122\0\u0f2e\0\u0f68\0\u0fa2\0\u0122\0\u0fdc\0\u1016\0\u1050"+
+    "\0\u108a\0\u0122";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[111];
+    int [] result = new int[114];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -184,44 +186,45 @@ public class FormLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\6\2\7\1\0\1\7\1\10\1\11\1\12\1\13"+
-    "\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23"+
-    "\1\24\1\25\1\26\1\27\1\30\1\31\1\32\1\33"+
-    "\1\34\1\35\2\36\1\37\1\6\1\40\1\41\24\36"+
-    "\1\42\1\43\1\44\1\45\2\46\1\6\3\0\1\46"+
-    "\1\47\26\46\1\50\32\46\1\6\1\7\1\51\1\0"+
-    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
-    "\1\27\1\30\1\31\1\32\1\33\1\34\1\35\2\36"+
-    "\1\37\1\6\1\40\1\41\24\36\1\42\1\43\1\44"+
-    "\1\45\16\52\1\53\52\52\1\6\2\7\1\0\1\7"+
-    "\1\10\1\11\1\54\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27"+
-    "\1\30\1\31\1\32\1\33\1\34\1\35\2\36\1\37"+
-    "\1\6\1\55\1\41\24\36\1\42\1\43\1\44\1\45"+
-    "\73\0\1\7\74\0\1\56\106\0\1\57\6\0\1\57"+
-    "\35\0\2\14\4\0\63\14\13\0\1\60\77\0\1\61"+
-    "\64\0\1\62\52\0\2\63\4\0\16\63\1\27\44\63"+
-    "\30\0\1\64\70\0\1\65\70\0\1\66\64\0\1\36"+
-    "\6\0\2\36\4\0\24\36\72\0\1\67\11\0\1\70"+
-    "\104\0\1\71\107\0\1\72\1\73\2\0\1\74\11\0"+
-    "\1\75\34\0\1\76\6\0\1\76\61\0\1\77\105\0"+
-    "\1\100\13\0\1\101\70\0\1\102\70\0\1\103\60\0"+
-    "\1\104\47\0\1\105\6\0\1\105\100\0\1\106\103\0"+
-    "\1\107\64\0\1\110\72\0\1\111\76\0\1\112\32\0"+
-    "\1\113\6\0\1\113\106\0\1\114\63\0\1\115\101\0"+
-    "\1\116\73\0\1\117\70\0\1\120\34\0\1\121\6\0"+
-    "\1\121\104\0\1\122\66\0\1\123\101\0\1\124\60\0"+
-    "\1\125\101\0\1\126\35\0\1\127\6\0\1\127\113\0"+
-    "\1\130\70\0\1\131\21\0\1\132\122\0\1\133\77\0"+
-    "\1\134\75\0\1\135\22\0\1\136\134\0\1\137\101\0"+
-    "\1\140\65\0\1\141\57\0\1\142\65\0\1\143\77\0"+
-    "\1\144\66\0\1\145\25\0\1\146\125\0\1\147\107\0"+
-    "\1\150\50\0\1\151\34\0\1\152\136\0\1\153\65\0"+
-    "\1\154\73\0\1\155\71\0\1\156\21\0\1\157\61\0";
+    "\1\6\2\7\1\0\1\7\1\10\1\7\1\11\1\12"+
+    "\1\13\1\14\1\15\1\16\1\17\1\20\1\21\1\22"+
+    "\1\23\1\24\1\25\1\26\1\27\1\30\1\31\1\32"+
+    "\1\33\1\34\1\35\2\36\1\37\1\6\1\40\1\41"+
+    "\24\36\1\42\1\43\1\44\1\45\2\46\1\6\3\0"+
+    "\2\46\1\47\26\46\1\50\32\46\1\6\1\7\1\51"+
+    "\1\0\1\7\1\10\1\7\1\11\1\12\1\13\1\14"+
+    "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24"+
+    "\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34"+
+    "\1\35\2\36\1\37\1\6\1\40\1\41\24\36\1\42"+
+    "\1\43\1\44\1\45\17\52\1\53\52\52\1\6\2\7"+
+    "\1\0\1\7\1\10\1\7\1\11\1\54\1\13\1\14"+
+    "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24"+
+    "\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34"+
+    "\1\35\2\36\1\37\1\6\1\55\1\41\24\36\1\42"+
+    "\1\43\1\44\1\45\74\0\1\7\76\0\1\56\107\0"+
+    "\1\57\6\0\1\57\35\0\2\14\4\0\64\14\14\0"+
+    "\1\60\100\0\1\61\65\0\1\62\75\0\1\63\1\0"+
+    "\1\27\75\0\1\64\71\0\1\65\71\0\1\66\65\0"+
+    "\1\36\6\0\2\36\4\0\24\36\73\0\1\67\12\0"+
+    "\1\70\105\0\1\71\110\0\1\72\1\73\2\0\1\74"+
+    "\11\0\1\75\35\0\1\76\6\0\1\76\62\0\1\77"+
+    "\106\0\1\100\13\0\1\101\71\0\1\102\71\0\1\103"+
+    "\61\0\1\104\50\0\1\105\6\0\1\105\101\0\1\106"+
+    "\104\0\1\107\65\0\1\110\73\0\1\111\77\0\1\112"+
+    "\33\0\1\113\6\0\1\113\107\0\1\114\64\0\1\115"+
+    "\102\0\1\116\74\0\1\117\71\0\1\120\35\0\1\121"+
+    "\6\0\1\121\105\0\1\122\67\0\1\123\102\0\1\124"+
+    "\20\0\1\125\71\0\1\126\110\0\1\127\6\0\1\127"+
+    "\114\0\1\130\71\0\1\131\22\0\1\132\130\0\1\133"+
+    "\102\0\1\134\67\0\1\135\23\0\1\136\123\0\1\137"+
+    "\100\0\1\140\102\0\1\141\63\0\1\142\102\0\1\143"+
+    "\61\0\1\144\65\0\1\145\66\0\1\146\70\0\1\147"+
+    "\77\0\1\150\26\0\1\151\67\0\1\152\147\0\1\153"+
+    "\51\0\1\154\35\0\1\155\137\0\1\156\66\0\1\157"+
+    "\74\0\1\160\72\0\1\161\22\0\1\162\61\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[4047];
+    int [] result = new int[4292];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -268,10 +271,10 @@ public class FormLexer implements java_cup.runtime.Scanner {
     "\3\1\2\11\3\1\1\11\1\1\4\11\1\1\4\11"+
     "\1\1\2\11\2\1\2\11\1\0\3\11\1\0\6\11"+
     "\5\0\1\1\27\0\1\11\2\0\1\11\3\0\1\11"+
-    "\7\0\1\11\3\0\1\11\4\0\1\11";
+    "\12\0\1\11\3\0\1\11\4\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[111];
+    int [] result = new int[114];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -354,10 +357,11 @@ public class FormLexer implements java_cup.runtime.Scanner {
 	private int linea;
 	private int columna;
 	private List<MensajeError> errores;
-
-    public void setErrores(List<MensajeError> errores){
-      this.errores = errores;
-    }
+	
+	public void setErrores(List<MensajeError> errores){
+		this.errores = errores;
+	}
+	
 	private Symbol symbol(int type){
 		return new Symbol(type, yyline+1, yycolumn+1);
 	}
@@ -369,11 +373,14 @@ public class FormLexer implements java_cup.runtime.Scanner {
 	private void iniciarCadena(){
 		yybegin(STRING);
     		texto.setLength(0);
+    		texto.append('"');
     		linea = yyline+1;
     		columna = yycolumn+1;
     	}
     	
     	private Symbol reportarCadena(){
+    		texto.append('"');
+    		yybegin(YYINITIAL);
     		return new Symbol(sym.CADENA, linea, columna, texto.toString());
     	}
     	
@@ -941,7 +948,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "correct":
 										return symbol(sym.CORRECT);
 									case "CURSIVE":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.CURSIVE);
 									case "DO":
 										return symbol(sym.DO);
 									case "DOUBLE":
@@ -973,7 +980,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "LINE":
 										return symbol(sym.GROSOR, TipoBorde.LINE);
 									case "MONO":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.MONO);
 									case "MULTIPLE_QUESTION":
 										return symbol(sym.MULTIPLE_QUESTION);
 									case "number":
@@ -995,7 +1002,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "RED":
 										return symbol(sym.TCOLOR, lexema);
 									case "SANS_SERIF":
-										return symbol(sym.FUENTE, lexema);
+										return symbol(sym.FUENTE, TLetra.SANS_SERIF);
 									case "SECTION":
 										return symbol(sym.SECTION);
 									case "SELECT_QUESTION":
