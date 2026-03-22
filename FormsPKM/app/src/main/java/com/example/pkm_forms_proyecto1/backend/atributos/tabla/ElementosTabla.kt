@@ -31,6 +31,7 @@ class ElementosTabla(simbolo: Simbolo, val elementos: LinkedList<LinkedList<Nodo
                         elemento.elementosCadena.append("\t\t\t")
                         elemento.elementosCadena.append(elemento2.elemento!!.aPkm())
                         elemento.elementosCadena.append("\n")
+                        elemento2.elemento!!.aumentarContador(infoCalculo.formulario.contador)
                     } else {
                         agregarMensaje(infoCalculo, elemento2.simbolo, "error al agregar elemento a la tabla.")
                     }

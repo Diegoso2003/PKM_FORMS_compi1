@@ -15,4 +15,10 @@ abstract class PreguntaConOpciones(nombre: String): Pregunta(nombre) {
         }
         return true
     }
+
+    override fun limpiar() {
+        super.limpiar()
+        this.options.clear()
+        this.correcto.clear()
+    }
 }

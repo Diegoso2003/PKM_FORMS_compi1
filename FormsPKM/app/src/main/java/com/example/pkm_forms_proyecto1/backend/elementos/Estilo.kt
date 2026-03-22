@@ -38,4 +38,12 @@ class Estilo: Elemento("STYLE") {
     override fun aumentarContador(contador: Contador) {
 
     }
+
+    override fun limpiar() {
+        this.colorCadena = ""
+        this.colorBackCadena = ""
+        this.textSize = -1.0
+        this.fontFamily = null
+        this.border = null
+    }
 }

@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.logging.interceptor)
     implementation(libs.androidx.material3)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.retrofit)

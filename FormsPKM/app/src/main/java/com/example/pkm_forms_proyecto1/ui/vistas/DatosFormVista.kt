@@ -22,22 +22,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pkm_forms_proyecto1.backend.Formulario
+import com.example.pkm_forms_proyecto1.backend.guardado_archivos.FormularioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatosFormVista(
-    navController: NavController, formulario: Formulario
+    navController: NavController, formulario: Formulario,
+    viewModel: FormularioViewModel = viewModel()
 ) {
     var autor by remember { mutableStateOf("") }
     var nombreFormulario by remember { mutableStateOf("") }
@@ -45,8 +51,10 @@ fun DatosFormVista(
 
     var mensajeError by remember { mutableStateOf<String?>(null) }
     var mensajeExito by remember { mutableStateOf<String?>(null) }
-
+    val resultado = viewModel.resultado
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(title = { Text("Crear Formulario") }, navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
@@ -161,22 +169,57 @@ fun DatosFormVista(
                                 mensajeExito = null
                             }
 
-                            nombreFormulario.isBlank() -> {
-                                mensajeError = "Por favor ingrese el nombre del formulario"
+                            !esNombreValido(nombreFormulario) -> {
+                                mensajeError = obtenerMensajeErrorNombre(nombreFormulario)
                                 mensajeExito = null
                             }
 
                             else -> {
-                                mensajeExito =
-                                    "¡Formulario '${nombreFormulario}' creado exitosamente!"
-                                mensajeError = null
+                                val context = navController.context
+                                formulario.agregarDatos(autor, nombreFormulario, descripcion)
+                                viewModel.guardar(formulario, context)
                             }
                         }
                     }, modifier = Modifier.weight(1f)
                 ) {
                     Text("Guardar")
                 }
+
+                resultado?.let {
+
+                    val mensaje = when {
+                        it.localOk && it.apiOk -> "Guardado en API y local"
+                        it.localOk && !it.apiOk -> "Guardado solo localmente"
+                        !it.localOk && it.apiOk -> "Guardado solo en API"
+                        else -> "No se pudo guardar"
+                    }
+
+                    LaunchedEffect(resultado) {
+                        snackbarHostState.showSnackbar(mensaje)
+                        navController.popBackStack()
+                    }
+                }
             }
         }
+    }
+}
+
+fun esNombreValido(nombre: String): Boolean {
+    if (nombre.isBlank()) return false
+    val caracteresInvalidos = setOf('/', '\\', ':', '*', '?', '"', '<', '>', '|', '\n', '\r', '\t')
+
+    return !nombre.any { it in caracteresInvalidos } &&
+            nombre != "." &&
+            nombre != ".."
+}
+
+fun obtenerMensajeErrorNombre(nombre: String): String {
+    return when {
+        nombre.isBlank() -> "El nombre no puede estar vacío"
+        nombre.contains('/') || nombre.contains('\\') -> "El nombre no puede contener / o \\"
+        nombre.any { it in setOf(':', '*', '?', '"', '<', '>', '|') } ->
+            "El nombre contiene caracteres no permitidos: : * ? \" < > |"
+        nombre == "." || nombre == ".." -> "El nombre no puede ser . o .."
+        else -> "ingresar un nombre valido"
     }
 }

@@ -15,4 +15,10 @@ abstract class Elemento(val nombre: String) {
     protected fun DAC(numero: Double): String{
         return String.format(Locale.US, "%.2f", numero)
     }
+
+    open fun limpiar(){
+        width = -1.0
+        height = -1.0
+        estilo = null
+    }
 }

@@ -26,4 +26,9 @@ class Texto: Elemento("TEXT") {
     override fun aumentarContador(contador: Contador) {
 
     }
+
+    override fun limpiar() {
+        super.limpiar()
+        content = ""
+    }
 }

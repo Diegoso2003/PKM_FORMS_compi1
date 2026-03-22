@@ -25,7 +25,7 @@ class PokeApi(simbolo: Simbolo, val inicio: NodoExpresion, val fin: NodoExpresio
             return lista
         }
         lista.addAll(runBlocking {
-            whoIsThatPokemon(1, 10, infoCalculo)
+            whoIsThatPokemon(valor1.toInt(), valor2.toInt(), infoCalculo)
         })
         return lista
     }

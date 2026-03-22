@@ -8,6 +8,12 @@ class Tabla: Contenedor("TABLE") {
     var elementos: LinkedList<LinkedList<Elemento>> = LinkedList()
     val elementosCadena = StringBuilder()
 
+    override fun limpiar() {
+        super.limpiar()
+        elementos.clear()
+        elementosCadena.clear()
+    }
+
     override fun aPkm(): String {
         val cadena = StringBuilder()
         cadena.append("<table=${DAC(width)}, ${DAC(height)}, ${DAC(pointX)}, ${DAC(pointY)}>\n")

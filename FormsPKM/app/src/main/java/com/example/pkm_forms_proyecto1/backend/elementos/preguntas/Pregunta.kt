@@ -4,4 +4,9 @@ import com.example.pkm_forms_proyecto1.backend.elementos.Elemento
 
 abstract class Pregunta(nombre: String): Elemento(nombre) {
     var label: String = ""
+
+    override fun limpiar() {
+        super.limpiar()
+        label = ""
+    }
 }

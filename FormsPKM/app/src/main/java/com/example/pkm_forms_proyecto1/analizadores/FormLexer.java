@@ -373,13 +373,11 @@ public class FormLexer implements java_cup.runtime.Scanner {
 	private void iniciarCadena(){
 		yybegin(STRING);
     		texto.setLength(0);
-    		texto.append('"');
     		linea = yyline+1;
     		columna = yycolumn+1;
     	}
     	
     	private Symbol reportarCadena(){
-    		texto.append('"');
     		yybegin(YYINITIAL);
     		return new Symbol(sym.CADENA, linea, columna, texto.toString());
     	}
@@ -956,7 +954,7 @@ public class FormLexer implements java_cup.runtime.Scanner {
 									case "DOTTED":
 										return symbol(sym.GROSOR, TipoBorde.DOTTED);
 									case "draw":
-										cambiarAInstruccion(); return symbol(sym.DRAW);
+										return symbol(sym.DRAW);
 									case "DROP_QUESTION":
 										return symbol(sym.DROP_QUESTION);
 									case "ELSE":

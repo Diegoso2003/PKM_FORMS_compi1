@@ -12,9 +12,11 @@ import java.util.LinkedList
 class Formulario {
     lateinit var tabla: TablaSimbolos
     val listaErrores: LinkedList<MensajeError> = LinkedList()
-    val datos = StringBuilder()
+    var datos = StringBuilder()
     var textoForm = ""
     lateinit var contador:Contador
+    var autor = ""
+    var nombre = ""
 
     fun analizar(texto: String):Boolean {
         textoForm = texto
@@ -30,9 +32,7 @@ class Formulario {
             val lista = result?.value
             if (lista is LinkedList<*>) {
                 val acciones = lista.filterIsInstance<Accion>()
-                if (acciones.size == lista.size) {
-                    recorrerArbol(LinkedList(acciones))
-                }
+                recorrerArbol(LinkedList(acciones))
                 if (contador.preguntas == 0) {
                     val mensajeError = MensajeError(TipoError.SEMANTICO)
                     mensajeError.descripcion =
@@ -46,7 +46,7 @@ class Formulario {
             mensajeError.descripcion = e.message ?: e.toString()
             e.printStackTrace()
             listaErrores.add(mensajeError)
-            return false;
+            return false
         }
     }
 
@@ -57,6 +57,8 @@ class Formulario {
     }
 
     fun agregarDatos(autor: String, nombre: String, descripcion: String){
+        this.autor = autor
+        this.nombre = nombre
         val documento = StringBuilder()
         val ahora = LocalDateTime.now()
         documento.append("###\n")
@@ -72,6 +74,7 @@ class Formulario {
         documento.append("\t\tMúltiples: ${contador.preguntasMultiples}\n")
         documento.append("###\n")
         documento.append(datos)
+        datos = documento
     }
 
 }

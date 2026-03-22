@@ -10,6 +10,12 @@ class Seccion:Contenedor("SECTION") {
     var elementos: LinkedList<Elemento> = LinkedList()
     val listaElementos = StringBuilder()
 
+    override fun limpiar() {
+        super.limpiar()
+        orientacion = null
+        elementos.clear()
+        listaElementos.clear()
+    }
     override fun aPkm(): String {
         val cadena = StringBuilder()
         cadena.append("<section=${DAC(width)}, ${DAC(height)}, ${DAC(pointX)}, ${DAC(pointY)},")
@@ -17,8 +23,8 @@ class Seccion:Contenedor("SECTION") {
         if(estilo != null){
             cadena.append(estilo!!.aPkm())
         }
-        cadena.append("\n\t<content>\n$listaElementos\n\t</content>")
-        cadena.append("</section>")
+        cadena.append("\n\t<content>\n$listaElementos\n\t</content>\n")
+        cadena.append("</section>\n")
         return cadena.toString()
     }
 

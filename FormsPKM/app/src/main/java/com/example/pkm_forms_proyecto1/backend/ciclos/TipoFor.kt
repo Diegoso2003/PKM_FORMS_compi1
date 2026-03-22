@@ -25,6 +25,7 @@ abstract class TipoFor(val simbolo: Simbolo) {
         }
         simboloTabla =
             SimboloTabla(simbolo.lexema, Tipo.NUMBER, simbolo.linea, simbolo.columna, comienzo)
+        infoCalculo.formulario.tabla.agregarALaTabla(simbolo.lexema, simboloTabla)
     }
     abstract fun condicion(infoCalculo: InfoCalculo):Boolean
     abstract fun instruccionSiguiente(infoCalculo: InfoCalculo)
