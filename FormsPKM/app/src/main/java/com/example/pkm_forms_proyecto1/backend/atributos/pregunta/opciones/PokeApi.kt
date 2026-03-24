@@ -33,7 +33,7 @@ class PokeApi(simbolo: Simbolo, val inicio: NodoExpresion, val fin: NodoExpresio
     suspend fun whoIsThatPokemon(ini: Int, fin: Int, infoCalculo: InfoCalculo): List<String> {
         return try {
             val limit = fin - ini + 1
-            val offset = ini - 1
+            val offset = ini
             val response = RetrofitInstance.api.getPokemonsByRange(limit, offset)
             response.results.map { it.name }
         } catch (e: IOException) {

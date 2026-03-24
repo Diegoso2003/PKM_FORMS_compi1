@@ -2,14 +2,10 @@ package com.example.pkm_forms_proyecto1.backend.elementos
 
 import androidx.compose.ui.graphics.Color
 import com.example.pkm_forms_proyecto1.backend.Contador
-import com.example.pkm_forms_proyecto1.backend.color.TipoColor
-import com.example.pkm_forms_proyecto1.enums.ColorToken
 import com.example.pkm_forms_proyecto1.enums.TLetra
 
 class Estilo: Elemento("STYLE") {
-    var color: Color?= null
     var colorCadena: String = ""
-    var colorBack: Color? = null
     var colorBackCadena: String = ""
     var textSize: Double = -1.0
     var border: Borde? = null

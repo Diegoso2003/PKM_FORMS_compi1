@@ -2,6 +2,7 @@ package com.example.pkm_forms_proyecto1.backend.elementos.contenedores
 
 import com.example.pkm_forms_proyecto1.backend.Contador
 import com.example.pkm_forms_proyecto1.backend.elementos.Elemento
+import com.example.pkm_forms_proyecto1.backend.elementos.Estilo
 import com.example.pkm_forms_proyecto1.enums.Orientacion
 import java.util.LinkedList
 
@@ -21,6 +22,9 @@ class Seccion:Contenedor("SECTION") {
         cadena.append("<section=${DAC(width)}, ${DAC(height)}, ${DAC(pointX)}, ${DAC(pointY)},")
         cadena.append((orientacion ?: Orientacion.VERTICAL).name).append(">")
         if(estilo != null){
+            cadena.append(estilo!!.aPkm())
+        } else {
+            estilo = Estilo()
             cadena.append(estilo!!.aPkm())
         }
         cadena.append("\n\t<content>\n$listaElementos\n\t</content>\n")

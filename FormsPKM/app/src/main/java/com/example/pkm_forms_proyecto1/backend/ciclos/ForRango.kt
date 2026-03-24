@@ -14,7 +14,7 @@ class ForRango(simbolo: Simbolo, val inicio: Int, val ultimo: Int) : TipoFor(sim
     }
 
     override fun instruccionSiguiente(infoCalculo: InfoCalculo) {
-        simboloTabla.valor = (simboloTabla.valor as Double) + 1
+        simboloTabla.valor = (simboloTabla.valor as Double) + 1.0
     }
 
     override fun calcularInicio(infoCalculo: InfoCalculo): Double {

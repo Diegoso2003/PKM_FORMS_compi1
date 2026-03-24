@@ -1,0 +1,220 @@
+package com.example.pkm_forms_proyecto1.pkm.analizadores;
+
+import java_cup.runtime.*;
+import com.example.pkm_forms_proyecto1.excepciones.PkmException;
+import com.example.pkm_forms_proyecto1.enums.TColor;
+import com.example.pkm_forms_proyecto1.enums.TLetra;
+import com.example.pkm_forms_proyecto1.enums.Orientacion;
+import com.example.pkm_forms_proyecto1.enums.TipoBorde;
+
+%%
+
+%public
+%unicode
+%ignorecase
+%class PkmLexer
+%cup
+%line
+%column
+
+%state COMENTARIO, ESTRELLA, ESTRELLA_NUMERO, ESTRELLA_FINAL, STRING, BORDER
+
+%{
+	private StringBuilder cadena = new StringBuilder();
+	private StringBuilder auxCadena = new StringBuilder();
+	private int columna;
+	private int fila;
+	private int estrellas;
+	
+	private void iniciarCadena(){
+		yybegin(STRING);
+		cadena.setLength(0);
+		auxCadena.setLength(0);
+		linea = yyline+1;
+		columna = yycolumn+1;
+	}
+	
+	private void guardarNumero(){
+		String numero = yytext();
+		auxCadena.append(numero);
+		estrellas = Integer.parseInt(numero);
+		yybegin(ESTRELLA_FINAL);
+	}
+	
+	private void agregarEstrellas(){
+		for(int i = 0; i < estrellas; i++){
+			cadena.append("⭐");
+		}
+		auxCadena.setLength(0);
+		yybegin(STRING);
+	}
+	
+	private Symbol reportarCadena(){
+		return new Symbol(sym.CADENA, linea, columna, cadena.toString());
+	}
+
+	private Symbol symbol(int type){
+		return new Symbol(type, yyline+1, yycolumn+1);
+	}
+    	
+	private Symbol symbol(int type, Object object){
+		return new Symbol(type, yyline+1, yycolumn+1, object);
+	}
+
+%}
+
+LineTerminator = \r|\n|\r\n
+WhiteSpace = {LineTerminator} | [\t\f ]
+Numero = (-|"+")?[0-9]+(\.[0-9]+)?
+Palabra = [a-zA-Z]+
+EmojiAper1 = "@[:"
+EmojiAper2 = "@["
+EmojiCerra1 = ":]"
+EmojiCerra2 = "]"
+Hexadecimal = "#"[0-9A-F]{6}
+Sonrisa = {EmojiAper1}(")"+|"smile"){EmojiCerra1}
+Triste = {EmojiAper1}("("+|"sad"){EmojiCerra1}
+Serio = {EmojiAper1}("|"+|"serious"){EmojiCerra1}
+Corazon = {EmojiAper2}("<"+"3"+|"smile"){EmojiCerra2}
+Estrella = {EmojiAper1}"star"
+Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
+
+%%
+
+<BORDER> {
+	">"							{ return symbol(sym.CERRA); }
+}
+
+<YYINITIAL, BORDER> {
+	{Palabra}						{
+									String lexema = yytext();
+									switch(lexema.toLowerCase()){
+										case "background":
+											return symbol(sym.BACKGROUND);
+										case "black":
+											return symbol(sym.TCOLOR, TColor.BLACK);
+										case "blue":
+											return symbol(sym.TCOLOR, TColor.BLUE);
+										case "border":
+											yybegin(BORDER); return symbol(sym.BORDER);
+										case "color":
+											return symbol(sym.COLOR);
+										case "content":
+											return symbol(sym.CONTENT);
+										case "dotted":
+											return symbol(sym.TBORDE, TipoBorde.DOTTED);
+										case "cursive":
+											return symbol(sym.TLETRA, TLetra.CURSIVE);
+										case "double":
+											return symbol(sym.TBORDE, TipoBorde.DOUBLE);
+										case "drop":
+											return symbol(sym.DROP);
+										case "element":
+											return symbol(sym.ELEMENT);
+										case "family":
+											return symbol(sym.FAMILY);
+										case "font":
+											return symbol(sym.FONT);
+										case "green":
+											return symbol(sym.TCOLOR, TColor.GREEN);
+										case "horizontal":
+											return symbol(sym.ORIENTACION, Orientacion.HORIZONTAL);
+										case "line":
+											if(yystate() == BORDER) {
+												return symbol(TBORDE, TipoBorde.LINE);
+											} 
+											return symbol(sym.LINE);
+										case "mono":
+											return symbol(sym.TLETRA, TLetra.MONO);
+										case "multiple":
+											return symbol(sym.MULTIPLE);
+										case "open":
+											return symbol(sym.OPEN);
+										case "purple":
+											return symbol(sym.TCOLOR, TColor.PURPLE);
+										case "red":
+											return symbol(sym.TCOLOR, TColor.RED);
+										case "sans_serif"
+											return symbol(sym.TLETRA, TLetra.MONO);
+										case "section":
+											return symbol(sym.SECTION);
+										case "select":
+											return symbol(sym.SELECT);
+										case "size":
+											return symbol(sym.SIZE);
+										case "sky":
+											return symbol(sym.TCOLOR, TColor.SKY);
+										case "style":
+											return symbol(sym.STYLE);
+										case "table":
+											return symbol(sym.TABLE);
+										case "text":
+											return symbol(sym.TEXT);
+										case "vertical":
+											return symbol(sym.ORIENTACION, Orientacion.VERTICAL);
+										case "white":
+											return symbol(sym.TCOLOR, TColor.WHITE);
+										case "yellow":
+											return symbol(sym.TCOLOR, TColor.YELLOW);
+										default:
+											throw new PkmException();
+									}
+								}
+	"###"							{ yybegin(COMENTARIO); }
+	"<"							{ return symbol(sym.APERT); }
+	">"							{ return symbol(sym.CERRA); }
+	"/"							{ return symbol(sym.DIAGON); }
+	"="							{ return symbol(sym.IGUAL); }
+	","							{ return symbol(sym.COMA); }
+	"{"							{ return symbol(sym.LLAVEAPER); }
+	"}"							{ return symbol(sym.LLAVECERRA); }
+	"("							{ return symbol(sym.PARENAPER); }
+	")"							{ return symbol(sym.PARENCERRA); }
+	{Hexadecimal}						{ return symbol(sym.HEXADECIMAL, yytext().substring(1)); }
+	\"							{ comenzarCadena(); }
+	{Numero}						{ return symbol(sym.NUMERO, Double.parseDouble(yytext()); }
+	{WhiteSpace}						{ /* ignorar espacios en blanco */ }
+	.							{ throw new PkmException(); }
+}
+
+<ESTRELLA>{
+	":]"							{ cadena.append("⭐"); yybegin(STRING); auxCadena.setLength(0); }
+	":"|"-"							{ auxCadena.append(yytext()); yybegin(ESTRELLA_NUMERO); }
+}
+
+<ESTRELLA_NUMERO>{
+	{Numero}						{ guardarNumero(); }
+}
+
+<ESTRELLA_FINAL>{
+	":]"							{ agregarEstrellas(); }
+}
+
+<ESTRELLA, ESTRELLA_NUMERO, ESTRELLA_FINAL>{
+	\\\"							{ cadena.append(auxCadena.toString()).append('"'); yybegin(STRING); auxCadena.setLength(0); }
+	\"							{ cadena.append(auxCadena.toString()); return reportarCadena(); }
+	.							{ cadena.append(auxCadena.toString()).append(yytext()); auxCadena.setLength(0); yybegin(STRING); }
+}
+
+<STRING, ESTRELLA, ESTRELLA_NUMERO, ESTRELLA_FINAL>{
+	\n							{ throw new PkmException(); }
+}
+
+<STRING> {
+	\\\"							{ cadena.append('"'); }
+	\"							{ return reportarCadena(); }
+	{Sonrisa}						{ cadena.append("😀"); }
+	{Triste}						{ cadena.append("🥲"); }
+	{Serio}							{ cadena.append("😐"); }
+	{Corazon}						{ cadena.append("❤️"); }
+	{Gato}							{ cadena.append("😺"); }
+	{Estrella}						{ auxCadena.append(yytext()); yybegin(ESTRELLA); }
+	.							{ cadena.append(yytext()); }
+}
+
+<COMENTARIO>{
+	"###"							{ yybegin(YYINITIAL); }
+	[^]							{ /* ignorar comentarios */ }
+}
+
+<<EOF>>								{ return symbol(sym.EOF); }

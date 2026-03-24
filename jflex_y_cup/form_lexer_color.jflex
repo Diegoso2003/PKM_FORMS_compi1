@@ -77,7 +77,7 @@ Hexadecimal = "#"[0-9A-F]{6}
 Sonrisa = {EmojiAper1}(")"+|"smile"){EmojiCerra1}
 Triste = {EmojiAper1}("("+|"sad"){EmojiCerra1}
 Serio = {EmojiAper1}("|"+|"serious"){EmojiCerra1}
-Corazon = {EmojiAper2}("<"+"3"+|"smile"){EmojiCerra2}
+Corazon = {EmojiAper2}("<"+"3"+|"heart"){EmojiCerra2}
 Estrella = {EmojiAper1}"star"(("-"|":"){Numero})?{EmojiCerra1}
 Gato = {EmojiAper1}("^^"|"cat"){EmojiCerra1}
 

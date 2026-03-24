@@ -1,0 +1,240 @@
+package com.example.pkm_forms_proyecto1.pkm.analizadores;
+
+import java_cup.runtime.*;
+import com.example.pkm_forms_proyecto1.pkm.Border;
+import com.example.pkm_forms_proyecto1.pkm.ClaseColor;
+import com.example.pkm_forms_proyecto1.pkm.Estiloui;
+import com.example.pkm_forms_proyecto1.pkm.Nodoui;
+import com.example.pkm_forms_proyecto1.pkm.ConversorColores;
+import com.example.pkm_forms_proyecto1.enums.TColor;
+import com.example.pkm_forms_proyecto1.enums.TLetra;
+import com.example.pkm_forms_proyecto1.enums.Orientacion;
+import com.example.pkm_forms_proyecto1.enums.TipoBorde;
+import com.example.pkm_forms_proyecto1.pkm.Texto;
+import com.example.pkm_forms_proyecto1.pkm.contenedor.Seccion;
+import com.example.pkm_forms_proyecto1.pkm.contenedor.Tabla;
+import com.example.pkm_forms_proyecto1.pkm.preguntas.PreguntaAbierta;
+import com.example.pkm_forms_proyecto1.pkm.preguntas.PreguntaDesplegable;
+import com.example.pkm_forms_proyecto1.pkm.preguntas.PreguntaMultiple;
+import com.example.pkm_forms_proyecto1.pkm.preguntas.PreguntaSeleccion;
+import java.util.LinkedList;
+import java.util.List;
+
+parser code {:
+	private ConversorColores conversor = new ConversorColores();
+	
+	public PkmParser(PkmLexer lex){
+        super(lex);
+    }
+
+    public void syntax_error(Symbol cur_token){
+        throw new PkmException();
+    }
+
+    public void report_error(String message, Object info){
+        throw new PkmException();
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token){
+        throw new PkmException();
+    }
+:}
+
+terminal				APERT, BACKGROUND, BORDER, CERRA, COMA, COLOR, CONTENT, DIAGON, DROP, ELEMENT, FAMILY, FONT, IGUAL, LINE, LLAVEAPER, LLAVECERRA, MULTIPLE, 						
+					OPEN, PARENAPER, PARENCERRA, TEXT, SECTION, SELECT, SIZE, STYLE, TABLE
+					;
+terminal TColor				TCOLOR
+					;
+terminal TipoBorde			TBORDE
+					;
+terminal Orientacion			ORIENTACION
+					;
+terminal TLetra				TLETRA
+					;
+terminal String				CADENA, HEXADECIMAL
+					;
+terminal Double				NUMERO
+					;
+non terminal				tabla_cerra, seccion_cerra
+					;
+non terminal LinkedList<Nodoui>		formulario, elementos, filas_tabla, columna_tabla, elementos_sec
+					;
+non terminal List<LinkedList<Nodoui>>	columnas_tabla, contenido_tabla
+					;
+non terminal Nodoui			tabla, seccion, seccion_aper, texto, pregunta, pregunta_abierta, pregunta_drop, pregunta_multiple, pregunta_select, pregmul_aper, 
+					pregsel_aper, predrop_aper, preabier_aper, texto_aper, elemento, fila_tabla, tabla_aper
+					;
+non terminal Estiloui			pregmul_final, pregsel_final, predrop_final, preabier_final, texto_final, estilos, estilo
+					;
+non terminal ClaseColor			color, color_a, background
+					;
+non terminal TLetra			font
+					;
+non terminal List<Double>		lista_correct, numeros
+					;
+non terminal List<String>		lista_op, opciones
+					;
+non terminal Double			text_size
+					;
+non terminal Border			border
+					;
+					
+start with formulario;
+
+formulario ::= formulario:n1 tabla:n2								{: RESULT = n1; n1.add(n2); :}
+	| formulario:n1 seccion:n2								{: RESULT = n1; n1.add(n2); :}
+	| tabla:n1										{: RESULT = new LinkedList<Nodoui>(); RESULT.add(n1); :}
+	| seccion:n1										{: RESULT = new LinkedList<Nodoui>(); RESULT.add(n1); :}
+	;
+	
+pregunta ::= pregunta_abierta:n1								{: RESULT = n1; :}
+	| pregunta_multiple:n1									{: RESULT = n1; :}
+	| pregunta_select:n1									{: RESULT = n1; :}
+	| pregunta_drop:n1									{: RESULT = n1; :}
+	;
+	
+lista_correct ::= LLAVEAPER numeros:n2 LLAVECERRA						{: RESULT = n2; :}
+	;
+	
+numeros ::= numeros:n1 COMA NUMERO:n3								{: RESULT = n1; n1.add(n3); :}
+	| NUMERO:n1										{: RESULT = new LinkedList<Double>(); RESULT.add(n1); :}
+	|											{: RESULT = new LinkedList<Double>(); :}
+	;
+	
+pregunta_multiple ::= pregmul_aper:n1 pregmul_final:n2						{: RESULT = n1; n1.setEstilo(n2); :}
+	;
+	
+pregmul_aper ::= APERT MULTIPLE IGUAL NUMERO:n4 COMA 
+	NUMERO:n6 COMA CADENA:n8 COMA lista_op:n10 COMA lista_correct:n12			{: RESULT = new PreguntaMultiple(n4, n6, n8, n10, n12); :}
+	;
+	
+pregmul_final ::= DIAGON CERRA
+	| CERRA estilo:n2 APERT DIAGON MULTIPLE CERRA						{: RESULT = n2; :}
+	;
+	
+pregunta_select ::= pregsel_aper:n1 pregsel_final:n2						{: RESULT = n1; n1.setEstilo(n2); :}
+	;
+	
+pregsel_aper ::= APERT SELECT IGUAL NUMERO:n4 COMA NUMERO:n6 COMA CADENA:n8 COMA 
+	lista_op:n10 COMA NUMERO:n12								{: RESULT = new PreguntaSeleccion(n4, n6, n8, n10, n12); :}
+	;
+	
+pregsel_final ::= DIAGON CERRA
+	| CERRA estilo:n2 APERT DIAGON SELECT CERRA						{: RESULT = n2; :}
+	;
+	
+lista_op ::= LLAVEAPER opciones:n2 LLAVECERRA							{: RESULT = n2; :}
+	;
+	
+opciones ::= opciones:n1 COMA CADENA:n3								{: RESULT = n1; n1.add(n3); :}
+	| CADENA:n1										{: RESULT = new LinkedList<String>(); RESULT.add(n1); :}
+	;
+	
+pregunta_drop ::= predrop_aper:n1 predrop_final:n2						{: RESULT = n1; n1.setEstilo(n2); :}
+	;
+	
+predrop_aper ::= APERT DROP IGUAL NUMERO:n4 COMA NUMERO:n6 COMA CADENA:n7 COMA 
+	lista_op:n9 COMA NUMERO:n11								{: RESULT = new PreguntaDesplegable(n4, n6, n7, n9, n11); :}
+	;
+	
+predrop_final ::= DIAGON CERRA
+	| CERRA estilo:n2 APERT DIAGON DROP CERRA						{: RESULT = n2; :}
+	;
+	
+pregunta_abierta ::= preabier_aper:n1 preabier_final:n2						{: RESULT = n1; n1.setEstilo(n2); :}
+	;
+	
+preabier_aper ::= APERT OPEN IGUAL NUMERO:n4 COMA NUMERO:n6 COMA CADENA:n8			{: RESULT = new PreguntaAbierta(n4, n6, n8); :}
+	;
+	
+preabier_final ::= DIAGON CERRA
+	| CERRA estilo:n2 APERT DIAGON OPEN CERRA						{: RESULT = n2; :}
+	;
+	
+texto ::= texto_aper:n1 texto_final:n2								{: RESULT = n1; n1.setEstilo(n2); :}
+	;
+	
+texto_aper ::= APERT TEXT IGUAL NUMERO:n4 COMA NUMERO:n6 COMA CADENA:n8				{: RESULT = new Texto(n4, n6, n8); :}
+	;
+	
+texto_final ::= DIAGON CERRA
+	| CERRA estilo:n2 APERT DIAGON TEXT CERRA						{: RESULT = n2; :}
+	;
+	
+elementos ::= elementos:n1 elemento:n2								{: RESULT = n1; n1.add(n2); :}
+	| elemento:n1										{: RESULT = new LinkedList<Nodoui>(); RESULT.add(n1); :}
+	;
+	
+elemento ::= tabla:n1										{: RESULT = n1; :}
+	| seccion:n1										{: RESULT = n1; :}
+	| pregunta:n1										{: RESULT = n1; :}
+	| texto:n1										{: RESULT = n1; :}
+	;
+	
+tabla ::= tabla_aper:n1 estilo:n2 contenido_tabla:n3 tabla_cerra				{: RESULT = n1; n1.setEstilo(n2); ((Tabla)n1).agregarElementos(n3); :}
+	;
+	
+tabla_aper ::= APERT TABLE IGUAL NUMERO:n3 COMA NUMERO:n5 COMA NUMERO:n7 COMA NUMERO:n9 CERRA		{: RESULT = new Tabla(n3, n5, n7, n9); :}
+	;
+	
+contenido_tabla ::= APERT CONTENT CERRA columnas_tabla:n4 APERT DIAGON CONTENT CERRA		{: RESULT = n4; :}
+	;
+	
+columnas_tabla ::= columnas_tabla:n1 columna_tabla:n2						{: RESULT = n1; n1.add(n2); :}
+	| columna_tabla:n1									{: RESULT = new LinkedList<LinkedList<Nodoui>>(); RESULT.add(n1); :}
+	;
+	
+columna_tabla ::= APERT LINE CERRA filas_tabla:n4 APERT DIAGON LINE CERRA			{: RESULT = n4; :}
+	;
+	
+filas_tabla ::= filas_tabla:n1 fila_tabla:n2							{: RESULT = n1; n1.add(n2); :}
+	| fila_tabla:n1										{: RESULT = new LinkedList<Nodoui>(); RESULT.add(n1); :}
+	;
+	
+fila_tabla ::= APERT ELEMENT CERRA elemento:n4 APERT DIAGON ELEMENT CERRA			{: RESULT = n4; :}
+	;
+	
+tabla_cerra ::= APERT DIAGON TABLE CERRA
+	;
+	
+seccion ::= seccion_aper:n1 estilo:n2 elementos_sec:n3 seccion_cerra				{: RESULT = n1; ((Seccion)n1).agregarLista(n3); n1.setEstilo(n2); :}
+	;
+	
+seccion_aper ::= APERT SECTION IGUAL NUMERO:n4 COMA NUMERO:n6 COMA NUMERO:n8 COMA NUMERO:n10
+	COMA ORIENTACION:n12 CERRA								{: RESULT = new Seccion(n4, n6, n8, n10, n12); :}
+	;
+	
+elementos_sec ::= APERT CONTENT CERRA elementos:n4 APERT DIAGON CONTENT CERRA			{: RESULT = n4; :}
+	;
+	
+seccion_cerra ::= APERT DIAGON SECTION CERRA
+	;
+	
+estilo ::= APERT STYLE CERRA estilos:n4 APERT border:n6						{: RESULT = n4; n4.setBorder(n6); :}
+	;
+	
+estilos ::= color_a:n1 background:n2 font:n3 text_size:n4					{: RESULT = new Estiloui(n1, n2, n3, n4); :}
+	;
+	
+color_a ::= APERT COLOR IGUAL color:n4 DIAGON CERRA						{: RESULT = n4; :}
+	;
+
+background ::= APERT BACKGROUND COLOR IGUAL color:n5 DIAGON CERRA				{: RESULT = n5; :}
+	;
+	
+font ::= APERT FONT FAMILY IGUAL TLETRA:n5 DIAGON CERRA						{: RESULT = n5; :}
+	;
+	
+text_size ::= APERT TEXT SIZE IGUAL NUMERO:n5 DIAGON CERRA					{: RESULT = n5; :}
+	;
+	
+border ::= BORDER COMA NUMERO:n4 COMA TBORDE:n6 COMA COLOR IGUAL color:n10 DIAGON CERRA
+	APERT DIAGON STYLE CERRA								{: RESULT = new Border(n4, n6, n10); :}
+	| DIAGON STYLE CERRA
+	;
+	
+color ::= TCOLOR:n1										{: RESULT = conversor.tipoColor(n1); :}
+	| APERT NUMERO:n2 COMA NUMERO:n4 COMA NUMERO:n6 CERRA					{: RESULT = conversor.hslColor(n2, n4, n6); :}
+	| PARENAPER NUMERO:n2 COMA NUMERO:n4 COMA NUMERO:n6 PARENCERRA				{: RESULT = conversor.rgbColor(n2, n4, n6); :}
+	| HEXADECIMAL:n1									{: RESULT = conversor.hexColor(n1); :}
+	;

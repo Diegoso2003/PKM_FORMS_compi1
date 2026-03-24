@@ -26,7 +26,7 @@ class ElementosTabla(simbolo: Simbolo, val elementos: LinkedList<LinkedList<Nodo
                 for(elemento2 in nodo){
                     elemento2.realizarAccion(infoCalculo)
                     elemento.elementosCadena.append("\t\t<element>\n")
-                    if(elemento2.elemento != null && elemento2.elemento!!.esElementoValido()){
+                    if(elemento2.elemento != null){
                         lista.add(elemento2.elemento!!)
                         elemento.elementosCadena.append("\t\t\t")
                         elemento.elementosCadena.append(elemento2.elemento!!.aPkm())

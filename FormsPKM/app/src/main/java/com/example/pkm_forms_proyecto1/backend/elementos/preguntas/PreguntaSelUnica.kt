@@ -13,7 +13,7 @@ class PreguntaSelUnica: PreguntaConOpciones("SELECT_QUESTION") {
         if(estilo != null){
             cadena.append(">\n")
             cadena.append(estilo!!.aPkm())
-            cadena.append("\n<select/>")
+            cadena.append("\n</select>")
         } else {
             cadena.append("/>\n")
         }

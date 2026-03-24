@@ -2,6 +2,7 @@ package com.example.pkm_forms_proyecto1.backend.elementos.contenedores
 
 import com.example.pkm_forms_proyecto1.backend.Contador
 import com.example.pkm_forms_proyecto1.backend.elementos.Elemento
+import com.example.pkm_forms_proyecto1.backend.elementos.Estilo
 import java.util.LinkedList
 
 class Tabla: Contenedor("TABLE") {
@@ -18,6 +19,9 @@ class Tabla: Contenedor("TABLE") {
         val cadena = StringBuilder()
         cadena.append("<table=${DAC(width)}, ${DAC(height)}, ${DAC(pointX)}, ${DAC(pointY)}>\n")
         if(estilo != null){
+            cadena.append(estilo!!.aPkm())
+        } else {
+            estilo = Estilo()
             cadena.append(estilo!!.aPkm())
         }
         cadena.append(elementosCadena).append("\n")

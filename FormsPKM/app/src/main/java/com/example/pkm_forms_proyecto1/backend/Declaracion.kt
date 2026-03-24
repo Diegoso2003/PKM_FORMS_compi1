@@ -50,11 +50,11 @@ class Declaracion(simbolo: Simbolo, val objeto: Any?, val identi: String, val ti
 
     private fun evaluarNumber(infoCalculo: InfoCalculo){
         if(objeto == null){
-            agregarAlaTabla(infoCalculo, 0)
+            agregarAlaTabla(infoCalculo, 0.0)
             return
         }
         if(objeto !is NodoExpresion){
-            agregarAlaTabla(infoCalculo, 0)
+            agregarAlaTabla(infoCalculo, 0.0)
             agregarMensaje(infoCalculo, simbolo, "variable tipo number solo almacena números")
             return
         }
@@ -63,7 +63,7 @@ class Declaracion(simbolo: Simbolo, val objeto: Any?, val identi: String, val ti
             agregarAlaTabla(infoCalculo, expr.objeto)
             return
         }
-        agregarAlaTabla(infoCalculo, 0)
+        agregarAlaTabla(infoCalculo, 0.0)
         if(expr.tipo == Tipo.ERROR_SEMANTICO){
             return
         }

@@ -2547,7 +2547,7 @@ class CUP$FormParser$actions {
 		int n2left = ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()).left;
 		int n2right = ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()).right;
 		NodoExpresion n2 = (NodoExpresion)((java_cup.runtime.Symbol) CUP$FormParser$stack.peek()).value;
-		 RESULT = new Multiplicacion(new Expresion(-1, Tipo.NUMBER, new Simbolo(n1left, n1right, "-")), n2,  n2.getSimbolo()); 
+		 RESULT = new Multiplicacion(new Expresion(-1.0, Tipo.NUMBER, new Simbolo(n1left, n1right, "-")), n2,  n2.getSimbolo()); 
               CUP$FormParser$result = parser.getSymbolFactory().newSymbol("unario",48, ((java_cup.runtime.Symbol)CUP$FormParser$stack.elementAt(CUP$FormParser$top-1)), ((java_cup.runtime.Symbol)CUP$FormParser$stack.peek()), RESULT);
             }
           return CUP$FormParser$result;

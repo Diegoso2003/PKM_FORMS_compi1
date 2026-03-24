@@ -1,5 +1,6 @@
 package com.example.pkm_forms_proyecto1.backend.nodos.n_aritmeticos
 
+import android.util.Log
 import com.example.pkm_forms_proyecto1.backend.Simbolo
 import com.example.pkm_forms_proyecto1.backend.nodos.Expresion
 import com.example.pkm_forms_proyecto1.backend.nodos.NodoAritmetico
@@ -14,6 +15,7 @@ class Multiplicacion(
         expr1: Expresion, expr2: Expresion
     ): Expresion {
         if(expr1.tipo == Tipo.NUMBER && expr2.tipo == Tipo.NUMBER){
+            Log.d("TAG", "Mensaje de prueba${expr1.simbolo.linea}, ${expr1.simbolo.columna}, ${expr1.simbolo.lexema}");
             val valor1 = expr1.objeto as Double
             val valor2 = expr2.objeto as Double
             return Expresion((valor1 * valor2), Tipo.NUMBER, expr1.simbolo)

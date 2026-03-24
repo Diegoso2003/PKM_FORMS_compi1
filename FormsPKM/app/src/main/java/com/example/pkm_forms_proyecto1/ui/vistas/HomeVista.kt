@@ -46,15 +46,15 @@ fun HomeVista(navController: NavController) {
             }
             Button(
                 onClick = {
-                    navController.navigate("")
+                    navController.navigate(Ruta.Local.ruta)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Formularios guardados")
+                Text("Formularios creados")
             }
             Button(
                 onClick = {
-                    navController.navigate("")
+                    navController.navigate(Ruta.Repo.ruta)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

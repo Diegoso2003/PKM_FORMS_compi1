@@ -21,7 +21,7 @@ class ElementosSeccion(simbolo: Simbolo, val elementos: LinkedList<NodoElemento>
             }
             for(element in elementos){
                 element.realizarAccion(infoCalculo)
-                if(element.elemento != null && element.elemento!!.esElementoValido()){
+                if(element.elemento != null){
                     elemento.listaElementos.append("\n")
                     elemento.listaElementos.append(element.elemento!!.aPkm())
                     elemento.listaElementos.append("\n")
