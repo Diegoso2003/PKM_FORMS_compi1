@@ -1,0 +1,12 @@
+com/mycompany/servidor_formularios_pkm/servicios/ArchivoServicio.class
+com/mycompany/servidor_formularios_pkm/modelos/ArchivoPkm.class
+com/mycompany/servidor_formularios_pkm/excepciones/NotFoundException.class
+com/mycompany/servidor_formularios_pkm/excepciones/PkmException.class
+com/mycompany/servidor_formularios_pkm/PoolConnections.class
+com/mycompany/servidor_formularios_pkm/excepciones/MensajeError.class
+com/mycompany/servidor_formularios_pkm/JakartaRestConfiguration.class
+com/mycompany/servidor_formularios_pkm/excepciones/mapper/PkmExceptionMapper.class
+com/mycompany/servidor_formularios_pkm/excepciones/mapper/NotFoundExceptionMapper.class
+com/mycompany/servidor_formularios_pkm/resources/JakartaEE10Resource.class
+com/mycompany/servidor_formularios_pkm/repositorio/ArchivoPkmDAO.class
+com/mycompany/servidor_formularios_pkm/controllers/ArchivoPkmController.class
